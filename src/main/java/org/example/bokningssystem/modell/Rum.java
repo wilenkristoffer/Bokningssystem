@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -18,6 +20,8 @@ public class Rum {
 
     @Enumerated(EnumType.STRING)
     private Rumstyp rumstyp;
+
+
 
 
     public Rum( Rumstyp rumstyp) {
