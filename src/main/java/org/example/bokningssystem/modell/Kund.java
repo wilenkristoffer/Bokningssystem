@@ -20,10 +20,6 @@ public class Kund {
     private String telefonNr;
     private String personummer;
 
-    @OneToMany
-    @JoinColumn
-    private List<Bokning> bokning;
-
 
     public Kund(String namn, String email, String telefonNr, String personummer) {
         this.namn = namn;

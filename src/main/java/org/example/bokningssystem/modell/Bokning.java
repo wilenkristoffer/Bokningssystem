@@ -25,6 +25,10 @@ public class Bokning {
     @JoinColumn
     private Rum room;
 
+    @ManyToOne
+    @JoinColumn
+    private Kund kund;
+
     public Bokning(LocalDate datum, int antalNatter) {
         this.datum = datum;
         this.antalNatter = antalNatter;
