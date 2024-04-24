@@ -1,10 +1,9 @@
 package org.example.bokningssystem.modell;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Data
 @Entity
+@Builder
 public class Bokning {
 
     @Id
@@ -21,6 +21,14 @@ public class Bokning {
     private Long id;
     private LocalDate datum;
     private int antalNatter;
+
+    @ManyToOne
+    @JoinColumn
+    private Rum room;
+
+    @ManyToOne
+    @JoinColumn
+    private Kund kund;
 
 
     public Bokning(LocalDate datum, int antalNatter) {

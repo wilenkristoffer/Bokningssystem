@@ -3,13 +3,17 @@ package org.example.bokningssystem.modell;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
+@Builder
 public class Rum {
 
     @Id
@@ -18,6 +22,10 @@ public class Rum {
 
     @Enumerated(EnumType.STRING)
     private Rumstyp rumstyp;
+
+    @OneToMany(mappedBy = "room")
+    @JoinColumn
+    private List<Bokning> bokning;
 
 
     public Rum( Rumstyp rumstyp) {
