@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.bokningssystem.modell.Bokning;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +19,17 @@ public class DetailedKundDto {
     private String email;
     private String telefonNr;
     private String personummer;
+    private List<BokningDto> bokning;
+
+
+
+
+
+
+
+
+
+
+
+
 }

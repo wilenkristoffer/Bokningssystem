@@ -24,7 +24,7 @@ public class Kund {
 
     //(mappedBy = "kund")
     @OneToMany(mappedBy = "kund")
-    private List<Bokning> bokning;
+    private List<Bokning> kundBokning;
 
 
     public Kund(String namn, String email, String telefonNr, String personummer) {
