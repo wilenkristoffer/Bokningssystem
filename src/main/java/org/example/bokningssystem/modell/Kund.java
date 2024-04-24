@@ -2,6 +2,7 @@ package org.example.bokningssystem.modell;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Entity
+@Builder
 public class Kund {
     @Id
     @GeneratedValue
@@ -19,6 +21,10 @@ public class Kund {
     private String email;
     private String telefonNr;
     private String personummer;
+
+    //(mappedBy = "kund")
+    @OneToMany(mappedBy = "kund")
+    private List<Bokning> kundBokning;
 
 
     public Kund(String namn, String email, String telefonNr, String personummer) {
