@@ -19,18 +19,23 @@ public class Rum {
     @Id
     @GeneratedValue
     private Long id;
+    private String name;
 
-    @Enumerated(EnumType.STRING)
-    private Rumstyp rumstyp;
+    //@Enumerated(EnumType.STRING)
+    //private Rumstyp rumstyp;
 
     //(mappedBy = "room")
     @OneToMany(mappedBy = "room")
     private List<Bokning> bokning;
 
+    public Rum(String name) {
+        this.name = name;
+    }
 
-
-
+    /*
     public Rum( Rumstyp rumstyp) {
         this.rumstyp = rumstyp;
     }
+
+ */
 }
