@@ -6,6 +6,7 @@ import org.example.bokningssystem.repo.KundRepo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,21 +51,27 @@ public class KundController {
 
     @PostMapping("modifyCustomer")
     public String modifyCustomer(@RequestParam("id") Long id,
-                                                 @RequestParam("name") String name,
-                                                 @RequestParam("email") String email,
-                                                 @RequestParam("phone") String phone,
-                                                @RequestParam("ssn") String ssn) {
-
-            Kund kund = kundRepo.findById(id).get();
-            kund.setNamn(name);
-            kund.setEmail(email);
-            kund.setTelefonNr(phone);
-            kund.setPersonummer(ssn);
-            kundRepo.save(kund);
-           return "redirect:/customer";
+                                 @RequestParam("name") String name,
+                                 @RequestParam("email") String email,
+                                 @RequestParam("phone") String phone,
+                                 @RequestParam("ssn") String ssn) {
+        Kund kund = kundRepo.findById(id).get();
+        kund.setNamn(name);
+        kund.setEmail(email);
+        kund.setTelefonNr(phone);
+        kund.setPersonummer(ssn);
+        kundRepo.save(kund);
+        return "redirect:/customer";
 
 
     }
 
-    
+    @RequestMapping(path ="/customer/deleteById/{id}")
+    public String deleteById(@PathVariable Long id) {
+        kundRepo.deleteById(id);
+        return "redirect:/customer";
+
+    }
+
+
 }

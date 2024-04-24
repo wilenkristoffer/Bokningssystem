@@ -33,7 +33,8 @@
                         <th scope="col">Email</th>
                         <th scope="col">Telefonnr</th>
                         <th scope="col">Personnummer</th>
-                        <th scope="col">Hantering</th>
+                        <th scope="col">Ändra</th>
+                        <th scope="col">Ta bort</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -42,9 +43,8 @@
                         <td th:text="${kund.email}"></td>
                         <td th:text="${kund.telefonNr}"></td>
                         <td th:text="${kund.personummer}"></td>
-                        <td>
-                            <button class="btn btn-dark edit-btn" data-id="${kund.id}">Ändra</button>
-                        </td>
+                        <td><button class="btn btn-dark edit-btn" data-id="${kund.id}">Ändra</button></td>
+                        <td><a th:href="@{/customer/deleteById/{id}(id=${kund.id})}">Ta bort</a></td>
                     </tr>
                     </tbody>
                 </table>
