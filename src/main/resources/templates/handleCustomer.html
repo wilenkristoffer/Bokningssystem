@@ -53,13 +53,36 @@
                 <p th:text="${emptyListMessage}"></p>
             </div>
 
+            <div class="modify-customer" style="display: none;">
+                <h2 class="mb-3">Ändra kund</h2>
+                <form action="/modifyCustomer" method="post" class="mb-4">
+                    <input type="hidden" id="modifyCustomerId" name="id" value="">
+                    <div class="mb-3">
+                        <label for="modifyName" class="form-label">Namn:</label>
+                        <input type="text" id="modifyName" name="namn" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modifyEmail" class="form-label">Email:</label>
+                        <input type="email" id="modifyEmail" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modifyPhone" class="form-label">Telefonnr:</label>
+                        <input type="text" id="modifyPhone" name="telefonNr" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modifySsn" class="form-label">Personnummer:</label>
+                        <input type="text" id="modifySsn" name="personummer" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-dark">Spara</button>
+                </form>
+            </div>
 
             <div class="add-customer">
                 <h2 class="mb-3">Registrera ny kund</h2>
                 <form action="customerCreated" method="post" class="mb-4">
                     <div class="mb-3">
                         <label for="name" class="form-label">Namn:</label>
-                        <input type="text" id="name" name="name" class="form-control" required>
+                        <input type="text" id="name" name="namn" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
@@ -67,11 +90,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Telefonnr:</label>
-                        <input type="text" id="phone" name="phone" class="form-control" required>
+                        <input type="text" id="phone" name="telefonNr" class="form-control" required>
                     </div>
                     <div class="mb-3">
                         <label for="ssn" class="form-label">Personnr:</label>
-                        <input type="text" id="ssn" name="ssn" class="form-control" required>
+                        <input type="text" id="ssn" name="personummer" class="form-control" required>
                     </div>
                     <button type="submit" class="btn btn-dark">Lägg till</button>
                 </form>
@@ -87,60 +110,23 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script th:inline="javascript">
-
-    //Ändrar namn på knappen för att Ändra/spara, samt ändrar bakgrundsfärgerna
     document.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const row = btn.closest('tr');
             const inputs = row.querySelectorAll('td:not(:last-child)');
-            const isEditing = btn.textContent.trim() === 'Spara';
+            const customerId = row.dataset.customerId;
 
-            inputs.forEach(input => {
-                if (isEditing) {
-                    input.contentEditable = false;
-                    input.style.backgroundColor = '';
-                } else {
-                    input.contentEditable = true;
-                    input.style.transition = 'background-color 0.5s';
-                    input.style.backgroundColor = 'red';
-                }
-            });
+            document.getElementById('modifyCustomerId').value = customerId;
+            document.getElementById('modifyName').value = inputs[0].textContent.trim();
+            document.getElementById('modifyEmail').value = inputs[1].textContent.trim();
+            document.getElementById('modifyPhone').value = inputs[2].textContent.trim();
+            document.getElementById('modifySsn').value = inputs[3].textContent.trim();
 
-            if (isEditing) {
-                btn.textContent = 'Ändra';
-
-                inputs.forEach(input => {
-                    input.style.backgroundColor = 'green';
-
-                    setTimeout(() => {
-                        input.style.transition = '';
-                        input.style.backgroundColor = '';
-                    }, 3000);
-                });
-
-                //AJAX för att hämta det ändrade datat
-                const customerId = row.dataset.customerId;
-                const name = inputs[0].textContent.trim();
-                const email = inputs[1].textContent.trim();
-                const phone = inputs[2].textContent.trim();
-                const ssn = inputs[3].textContent.trim();
-
-                //Lägger till och encodar datat
-                fetch('/modifyCustomer?id=' + customerId +
-                    '&name=' + encodeURIComponent(name) +
-                    '&email=' + encodeURIComponent(email) +
-                    '&phone=' + encodeURIComponent(phone) +
-                    '&ssn=' + encodeURIComponent(ssn), {
-                    //POST data som skickas för att sedan hanteras av controllern(modifyCustomer)
-                    method: 'POST'
-                })
-            } else {
-                btn.textContent = 'Spara';
-            }
+            document.querySelector('.modify-customer').style.display = 'block';
         });
     });
-
 </script>
+
 
 </body>
 </html>

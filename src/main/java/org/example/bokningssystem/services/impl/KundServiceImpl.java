@@ -11,6 +11,7 @@ import org.example.bokningssystem.services.KundService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -54,4 +55,31 @@ public class KundServiceImpl implements KundService {
         kundRepo.save(detailedKundToDetailedKundDto(kund));
         return "Kunden har sparats!!!!";
     }
+
+    @Override
+    public String modifyKund(DetailedKundDto updatedKund) {
+
+        Optional<Kund> optionalKund = kundRepo.findById(updatedKund.getId());
+
+            Kund existingKund = optionalKund.get();
+
+
+            existingKund.setNamn(updatedKund.getNamn());
+            existingKund.setEmail(updatedKund.getEmail());
+            existingKund.setTelefonNr(updatedKund.getTelefonNr());
+            existingKund.setPersonummer(updatedKund.getPersonummer());
+
+            kundRepo.save(existingKund);
+
+            return "Kunden har uppdaterats!";
+        }
+
+    @Override
+    public String deleteCustomer(Long customerId) {
+        Optional<Kund> optionalKund = kundRepo.findById(customerId);
+
+            kundRepo.deleteById(customerId);
+            return "Kunden har raderats!";
+        }
+
 }
