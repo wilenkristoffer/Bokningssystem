@@ -19,6 +19,14 @@ public class RumServiceImpl implements RumService {
     @Override
     public DetailedRumDto rumToDetailedRumDto(Rum r) {
         return DetailedRumDto.builder().id(r.getId())
+                .build();
+    }
+/*
+    @Override
+    public DetailedRumDto rumToDetailedRumDto(Rum r) {
+        return DetailedRumDto.builder().id(r.getId())
                 .rumstyp(r.getRumstyp()).build();
     }
+
+ */
 }
