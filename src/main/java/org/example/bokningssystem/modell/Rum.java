@@ -23,8 +23,8 @@ public class Rum {
     @Enumerated(EnumType.STRING)
     private Rumstyp rumstyp;
 
+    //(mappedBy = "room")
     @OneToMany(mappedBy = "room")
-    @JoinColumn
     private List<Bokning> bokning;
 
 

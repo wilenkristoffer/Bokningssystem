@@ -22,8 +22,8 @@ public class Kund {
     private String telefonNr;
     private String personummer;
 
+    //(mappedBy = "kund")
     @OneToMany(mappedBy = "kund")
-    @JoinColumn
     private List<Bokning> bokning;
 
 
