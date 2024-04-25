@@ -34,7 +34,7 @@ public class RumServiceImpl implements RumService {
     }
 
     @Override
-    public Rum detailedKundToDetailedKundDto(DetailedRumDto r) {
+    public Rum detailedRumToDetailedRumDto(DetailedRumDto r) {
         return Rum.builder().id(r.getId())
                 .name(r.getName())
                 .build();
@@ -48,7 +48,7 @@ public class RumServiceImpl implements RumService {
 
     @Override
     public String addRum(DetailedRumDto rum) {
-        rumRepo.save(detailedKundToDetailedKundDto(rum));
+        rumRepo.save(detailedRumToDetailedRumDto(rum));
         return "Rum har skapats";
     }
 
