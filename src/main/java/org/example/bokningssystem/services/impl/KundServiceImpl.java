@@ -76,8 +76,6 @@ public class KundServiceImpl implements KundService {
 
     @Override
     public String deleteCustomer(Long customerId) {
-        Optional<Kund> optionalKund = kundRepo.findById(customerId);
-
             kundRepo.deleteById(customerId);
             return "Kunden har raderats!";
         }
