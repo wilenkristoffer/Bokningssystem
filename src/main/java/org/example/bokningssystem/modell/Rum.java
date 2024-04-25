@@ -26,7 +26,7 @@ public class Rum {
 
     //(mappedBy = "room")
     @OneToMany(mappedBy = "room")
-    private List<Bokning> bokning;
+    private List<Bokning> rumBokning;
 
     public Rum(String name) {
         this.name = name;

@@ -16,6 +16,6 @@ import java.util.List;
 public class DetailedRumDto {
 
     private Long id;
-    private Rumstyp rumstyp;
-    private List<Bokning> bokning;
+    private String name;
+    private List<BokningDto> bokning;
 }

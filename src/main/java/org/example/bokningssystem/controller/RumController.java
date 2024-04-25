@@ -2,8 +2,10 @@ package org.example.bokningssystem.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.bokningssystem.dtos.DetailedRumDto;
 import org.example.bokningssystem.modell.Rum;
 import org.example.bokningssystem.repo.RumRepo;
+import org.example.bokningssystem.services.RumService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,12 +21,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RumController {
 
-    private final RumRepo rumRepo;
+    private final RumService rumService;
 
 
     @RequestMapping("rooms")
     public String handleRooms(Model model){
-        List<Rum> rummen = rumRepo.findAll();
+        List<DetailedRumDto> rummen = rumService.getAllRooms();
         model.addAttribute("rummen", rummen);
         model.addAttribute("pageTitle", "Alla befintliga rum");
         model.addAttribute("tableHeadings", Arrays.asList("Rumstyp"));
@@ -33,10 +35,12 @@ public class RumController {
     }
 
     @PostMapping("roomCreated")
-    public String createRoom(@RequestParam String name){
-        rumRepo.save(new Rum(name));
+    public String createRoom(DetailedRumDto rum){
+        rumService.addRum(rum);
         return "redirect:/rooms";
     }
+
+
 
 
 }
