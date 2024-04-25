@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BokningDto {
     private Long id;
-    private int antalNatter;
     //Kan tillägga mer kanske?
 }

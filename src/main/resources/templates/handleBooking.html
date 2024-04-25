@@ -2,9 +2,118 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
     <title>Title</title>
+
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 </head>
 <body>
-Bokningar
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/">Hem</a>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="kunder" th:unless="${#lists.isEmpty(kunder)}">
+                <h2 th:text="${customerPageTitle}" class="mb-3"></h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Namn</th>
+                        <th scope="col">Välj</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="kund : ${kunder}" th:data-customer-id="${kund.id}">
+                        <td th:text="${kund.namn}"></td>
+                        <td><input type="radio" class="choose-radio" name="kund" data-id="${kund.id}" onclick="updateCustomer(this)"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="no-kunder" th:if="${#lists.isEmpty(kunder)}">
+                <p th:text="${customerEmptyListMessage}"></p>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="rooms" th:unless="${#lists.isEmpty(rummen)}">
+                <h2 th:text="${roomPageTitle}" class="mb-3"></h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Namn</th>
+                        <th scope="col">Välj</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rum : ${rummen}" th:data-room-id="${rum.id}">
+                        <td th:text="${rum.name}"></td>
+                        <td><input type="radio" class="choose-radio" name="room" data-id="${rum.id}" onclick="updateRoom(this)"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="no-rooms" th:if="${#lists.isEmpty(rummen)}">
+                <p th:text="${roomEmptyListMessage}"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flatpickr date picker for selecting booking dates -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <form action="/bookRoom" method="post">
+                    <!-- Hidden input fields for selected customer and room IDs -->
+                    <input type="hidden" id="selected_customer" name="selected_customer">
+                    <input type="hidden" id="selected_room" name="selected_room">
+                    <label for="start_date">Start Date:</label>
+                    <input type="text" id="start_date" name="start_date" class="form-control" data-input>
+                    <label for="end_date">End Date:</label>
+                    <input type="text" id="end_date" name="end_date" class="form-control" data-input>
+                    <button type="submit" class="btn btn-dark mt-3">Boka</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="py-5 bg-dark">
+    <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; 2024</p></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+flatpickr('#start_date', {
+dateFormat: 'Y-m-d',
+allowInput: true
+});
+flatpickr('#end_date', {
+dateFormat: 'Y-m-d',
+allowInput: true
+});
+});
+
+function updateCustomer(element) {
+    document.getElementById('selected_customer').value = element.dataset.id;
+}
+
+function updateRoom(element) {
+    document.getElementById('selected_room').value = element.dataset.id;
+}
+</script>
+
 </body>
 </html>

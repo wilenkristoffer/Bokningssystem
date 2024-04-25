@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class RumDto {
     private Long id;
+    private String name;
     //Kan tillägga mer kanske?
 }

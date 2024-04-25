@@ -32,6 +32,7 @@ public class Rum {
         this.name = name;
     }
 
+
     /*
     public Rum( Rumstyp rumstyp) {
         this.rumstyp = rumstyp;

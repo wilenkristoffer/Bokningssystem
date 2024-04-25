@@ -9,5 +9,7 @@ import java.util.List;
 public interface BokningService {
 
     public BokningDto bokningToBokningDto(Bokning b);
+    public Bokning detailedBokningToDetailedBokningDto(DetailedBokningDto b);
     public DetailedBokningDto bokningToDetailedBokningDto(Bokning b);
+    public String addBokning(DetailedBokningDto bokning);
 }

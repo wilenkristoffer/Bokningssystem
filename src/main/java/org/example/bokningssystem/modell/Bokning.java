@@ -17,8 +17,8 @@ public class Bokning {
     @Id
     @GeneratedValue
     private Long id;
-    private LocalDate datum;
-    private int antalNatter;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @ManyToOne
     @JoinColumn
@@ -28,10 +28,5 @@ public class Bokning {
     @JoinColumn
     private Kund kund;
 
-    public Bokning(LocalDate datum, int antalNatter) {
-        this.datum = datum;
-        this.antalNatter = antalNatter;
-
-    }
 }
 
