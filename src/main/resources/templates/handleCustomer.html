@@ -53,7 +53,7 @@
                 <p th:text="${emptyListMessage}"></p>
             </div>
 
-            <div class="modify-customer" style="display: none;">
+            <div id="modifyCustomerForm" class="modify-customer" style="display: none;">
                 <h2 class="mb-3">Ändra kund</h2>
                 <form action="/modifyCustomer" method="post" class="mb-4">
                     <input type="hidden" id="modifyCustomerId" name="id" value="">
@@ -123,6 +123,8 @@
             document.getElementById('modifySsn').value = inputs[3].textContent.trim();
 
             document.querySelector('.modify-customer').style.display = 'block';
+
+            document.getElementById('modifyCustomerForm').scrollIntoView({ behavior: 'smooth' });
         });
     });
 </script>
