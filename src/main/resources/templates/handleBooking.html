@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Title</title>
+    <title>Bokningar - Personal</title>
 
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -28,12 +28,14 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th scope="col" class="hidden">ID</th>
                         <th scope="col">Namn</th>
                         <th scope="col">Välj</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="kund : ${kunder}" th:data-customer-id="${kund.id}">
+                        <td><span class="hidden customer-id" th:text="${kund.id}"></span></td>
                         <td th:text="${kund.namn}"></td>
                         <td><input type="radio" class="choose-radio" name="kund" data-id="${kund.id}" onclick="updateCustomer(this)"></td>
                     </tr>
@@ -51,12 +53,14 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th scope="col" class="hidden">ID</th>
                         <th scope="col">Namn</th>
                         <th scope="col">Välj</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="rum : ${rummen}" th:data-room-id="${rum.id}">
+                        <td><span class="hidden room-id" th:text="${rum.id}"></span></td>
                         <td th:text="${rum.name}"></td>
                         <td><input type="radio" class="choose-radio" name="room" data-id="${rum.id}" onclick="updateRoom(this)"></td>
                     </tr>
@@ -69,26 +73,38 @@
         </div>
     </div>
 
-    <!-- Flatpickr date picker for selecting booking dates -->
     <div class="row">
         <div class="col-lg-12">
-            <div class="form-group">
-                <form action="/bookRoom" method="post">
-                    <!-- Hidden input fields for selected customer and room IDs -->
-                    <input type="hidden" id="selected_customer" name="selected_customer">
-                    <input type="hidden" id="selected_room" name="selected_room">
-                    <label for="start_date">Start Date:</label>
-                    <input type="text" id="start_date" name="start_date" class="form-control" data-input>
-                    <label for="end_date">End Date:</label>
-                    <input type="text" id="end_date" name="end_date" class="form-control" data-input>
-                    <button type="submit" class="btn btn-dark mt-3">Boka</button>
-                </form>
-            </div>
+            <h2 class="mb-3">Boka rum</h2>
+            <form action="/bookRoom" method="post" class="mb-4">
+                <!-- Hidden input fields for selected customer and room IDs -->
+                <input type="hidden" id="selected_customer" name="kund.id">
+                <input type="hidden" id="selected_room" name="room.id">
+
+                <!-- Start Date input field -->
+                <div class="mb-3">
+                    <label for="start_date" class="form-label">Start Date:</label>
+                    <input type="text" id="start_date" name="startDate" class="form-control" data-input required>
+                </div>
+
+                <!-- End Date input field -->
+                <div class="mb-3">
+                    <label for="end_date" class="form-label">End Date:</label>
+                    <input type="text" id="end_date" name="endDate" class="form-control" data-input required>
+                </div>
+
+                <!-- Submit button -->
+                <button type="submit" class="btn btn-dark">Boka</button>
+            </form>
         </div>
     </div>
+
+
+
 </div>
 
-<footer class="py-5 bg-dark">
+
+    <footer class="py-5 bg-dark">
     <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; 2024</p></div>
 </footer>
 
@@ -104,14 +120,15 @@ flatpickr('#end_date', {
 dateFormat: 'Y-m-d',
 allowInput: true
 });
-});
-
-function updateCustomer(element) {
-    document.getElementById('selected_customer').value = element.dataset.id;
+});  function updateCustomer(element) {
+    var customerId = element.closest("tr").querySelector("td:first-child").innerText;
+    document.getElementById('selected_customer').value = customerId;
 }
 
 function updateRoom(element) {
-    document.getElementById('selected_room').value = element.dataset.id;
+    var roomId = element.closest("tr").querySelector("td:first-child").innerText;
+    document.getElementById('selected_room').value = roomId;
+
 }
 </script>
 
