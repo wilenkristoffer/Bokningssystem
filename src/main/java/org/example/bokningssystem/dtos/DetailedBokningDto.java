@@ -15,8 +15,8 @@ import java.time.LocalDate;
 public class DetailedBokningDto {
 
     private Long id;
-    private LocalDate datum;
-    private int antalNatter;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private KundDto kund;
     private RumDto room;
 }

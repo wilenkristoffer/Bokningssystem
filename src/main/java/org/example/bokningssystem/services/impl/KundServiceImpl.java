@@ -51,6 +51,11 @@ public class KundServiceImpl implements KundService {
     }
 
     @Override
+    public List<KundDto> getAllKundSimple() {
+        return kundRepo.findAll().stream().map(k -> kundToKundDto(k)).toList();
+    }
+
+    @Override
     public String addKund(DetailedKundDto kund) {
         kundRepo.save(detailedKundToDetailedKundDto(kund));
         return "Kunden har sparats!!!!";

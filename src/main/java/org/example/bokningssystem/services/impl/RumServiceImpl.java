@@ -40,6 +40,12 @@ public class RumServiceImpl implements RumService {
                 .build();
     }
 
+
+    @Override
+    public List<RumDto> getAllRumSimple() {
+        return rumRepo.findAll().stream().map(r -> rumToRumDto(r)).toList();
+    }
+
     @Override
     public List<DetailedRumDto> getAllRooms() {
         return rumRepo.findAll().stream()
@@ -51,5 +57,6 @@ public class RumServiceImpl implements RumService {
         rumRepo.save(detailedRumToDetailedRumDto(rum));
         return "Rum har skapats";
     }
+
 
 }

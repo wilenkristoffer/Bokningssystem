@@ -13,6 +13,7 @@ public interface KundService {
     public DetailedKundDto kundToDetailedKundDto(Kund k);
     public Kund detailedKundToDetailedKundDto(DetailedKundDto k);
     public List<DetailedKundDto> getAllKunder();
+    public List<KundDto> getAllKundSimple();
 
     public String addKund(DetailedKundDto kund);
     public String modifyKund(DetailedKundDto updatedKund);
