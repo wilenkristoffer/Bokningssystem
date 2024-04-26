@@ -1,5 +1,7 @@
 package org.example.bokningssystem.dtos;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +18,8 @@ import java.util.List;
 public class DetailedRumDto {
 
     private Long id;
+    @NotEmpty(message = "Måste fylla i fältet")
+    @Size(min = 3, message = "Minst 3 bokstäver")
     private String name;
     private List<BokningDto> bokning;
 }
