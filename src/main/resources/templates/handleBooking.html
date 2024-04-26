@@ -73,35 +73,42 @@
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <h2 class="mb-3">Boka rum</h2>
-            <form action="/bookRoom" method="post" class="mb-4">
-                <!-- Hidden input fields for selected customer and room IDs -->
-                <input type="hidden" id="selected_customer" name="kund.id">
-                <input type="hidden" id="selected_room" name="room.id">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2 class="mb-3">Boka rum</h2>
+                <form id="bookRoomForm" action="/bookRoom" method="post" class="mb-4">
+                    <!-- Hidden input fields for selected customer and room IDs -->
+                    <input type="hidden" id="selected_customer" name="kund.id">
+                    <input type="hidden" id="selected_room" name="room.id">
 
-                <!-- Start Date input field -->
-                <div class="mb-3">
-                    <label for="start_date" class="form-label">Start Date:</label>
-                    <input type="text" id="start_date" name="startDate" class="form-control" data-input required>
-                </div>
+                    <!-- Start Date input field -->
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="start_date" class="form-label">Start Date:</label>
+                            <input type="text" id="start_date" name="startDate" class="form-control" data-input required>
+                        </div>
 
-                <!-- End Date input field -->
-                <div class="mb-3">
-                    <label for="end_date" class="form-label">End Date:</label>
-                    <input type="text" id="end_date" name="endDate" class="form-control" data-input required>
-                </div>
+                        <!-- End Date input field -->
+                        <div class="col">
+                            <label for="end_date" class="form-label">End Date:</label>
+                            <input type="text" id="end_date" name="endDate" class="form-control" data-input required>
+                        </div>
+                    </div>
 
-                <!-- Submit button -->
-                <button type="submit" class="btn btn-dark">Boka</button>
-            </form>
+                    <!-- Submit button -->
+                    <button type="submit" class="btn btn-dark">Boka</button>
+                </form>
+            </div>
         </div>
     </div>
 
 
+</div>
+
 
 </div>
+
 
 
     <footer class="py-5 bg-dark">
@@ -130,6 +137,32 @@ function updateRoom(element) {
     document.getElementById('selected_room').value = roomId;
 
 }
+function validateRadioButtons() {
+    var radioButtons = document.querySelectorAll('.choose-radio');
+
+    var isChecked = false;
+    for (var i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].checked) {
+            isChecked = true;
+            break;
+        }
+    }
+
+
+    if (!isChecked) {
+        alert('Vänligen välj på en kund samt rum för att fortsätta.');
+        return false;
+    }
+
+    return true;
+}
+
+document.getElementById('bookRoomForm').addEventListener('submit', function(event) {
+
+    if (!validateRadioButtons()) {
+        event.preventDefault();
+    }
+});
 </script>
 
 </body>
