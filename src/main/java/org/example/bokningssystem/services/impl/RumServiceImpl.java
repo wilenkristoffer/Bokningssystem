@@ -21,7 +21,7 @@ public class RumServiceImpl implements RumService {
 
     @Override
     public RumDto rumToRumDto(Rum r) {
-        return RumDto.builder().id(r.getId()).build();
+        return RumDto.builder().id(r.getId()).name(r.getName()).build();
     }
 
     @Override
