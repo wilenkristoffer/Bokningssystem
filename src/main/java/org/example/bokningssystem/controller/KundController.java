@@ -55,9 +55,4 @@ public class KundController {
         return "redirect:/customer";
 
     }
-
-
-
-
-
 }
