@@ -1,6 +1,7 @@
 package org.example.bokningssystem.controller;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.bokningssystem.dtos.DetailedKundDto;
 import org.example.bokningssystem.modell.Kund;
@@ -9,6 +10,7 @@ import org.example.bokningssystem.services.KundService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -34,7 +36,16 @@ public class KundController {
     }
 
     @PostMapping("customerCreated")
-    public String create(DetailedKundDto kund, RedirectAttributes redirectAttributes) {
+    public String create(@Valid DetailedKundDto kund, BindingResult result,
+                         Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()){
+            model.addAttribute("kund", kund);
+            model.addAttribute("kunder", kundService.getAllKunder());
+            model.addAttribute("pageTitle", "Alla befintliga kunder");
+            model.addAttribute("tableHeadings", Arrays.asList("Namn", "Email", "Telefon", "Personnummer"));
+            model.addAttribute("emptyListMessage", "Inga kunder hittades");
+            return "handleCustomer.html";
+        }
         redirectAttributes.addFlashAttribute("successMessage", "Kunden har lagts till!");
         kundService.addKund(kund);
         return "redirect:/customer";
