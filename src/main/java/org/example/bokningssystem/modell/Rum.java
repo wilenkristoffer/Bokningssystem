@@ -26,22 +26,13 @@ public class Rum {
     @Size(min = 3, message = "Minst 3 bokstäver")
     private String name;
 
-    //@Enumerated(EnumType.STRING)
-    //private Rumstyp rumstyp;
+    @Enumerated(EnumType.STRING)
+    private Rumstyp rumstyp;
 
-    //(mappedBy = "room")
+    private int antalSangar;
+
     @OneToMany(mappedBy = "room")
     private List<Bokning> rumBokning;
 
-    public Rum(String name) {
-        this.name = name;
-    }
 
-
-    /*
-    public Rum( Rumstyp rumstyp) {
-        this.rumstyp = rumstyp;
-    }
-
- */
 }

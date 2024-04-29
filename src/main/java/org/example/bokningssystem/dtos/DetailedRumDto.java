@@ -21,5 +21,10 @@ public class DetailedRumDto {
     @NotEmpty(message = "Måste fylla i fältet")
     @Size(min = 3, message = "Minst 3 bokstäver")
     private String name;
+
+
+    private Rumstyp rumstyp;
+    private int antalSangar;
+
     private List<BokningDto> bokning;
 }

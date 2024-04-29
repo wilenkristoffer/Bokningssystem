@@ -3,6 +3,7 @@ package org.example.bokningssystem.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.bokningssystem.dtos.DetailedKundDto;
 import org.example.bokningssystem.dtos.DetailedRumDto;
 import org.example.bokningssystem.modell.Rum;
 import org.example.bokningssystem.repo.RumRepo;
@@ -46,6 +47,14 @@ public class RumController {
             return "handleRooms.html";
         }
         rumService.addRum(rum);
+        return "redirect:/rooms";
+    }
+
+    @PostMapping("addbeds")
+    public String addBeds(DetailedRumDto rum) {
+
+        rumService.addBeds(rum);
+
         return "redirect:/rooms";
     }
 
