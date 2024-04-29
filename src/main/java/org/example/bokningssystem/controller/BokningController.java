@@ -4,6 +4,7 @@ package org.example.bokningssystem.controller;
 import lombok.RequiredArgsConstructor;
 
 import org.example.bokningssystem.dtos.DetailedBokningDto;
+import org.example.bokningssystem.dtos.DetailedKundDto;
 import org.example.bokningssystem.dtos.KundDto;
 import org.example.bokningssystem.dtos.RumDto;
 import org.example.bokningssystem.modell.Kund;
@@ -33,9 +34,26 @@ public class BokningController {
     private final RumService rumService;
     private final RumRepo rumRepo;
     private final KundRepo kundRepo;
+/*
+    @RequestMapping("booking")
+    public String showBookings(Model model) {
+        List<DetailedBokningDto> bokningar = bokningService.getAllBookings();
+        model.addAttribute("bokningar", bokningar);
+        model.addAttribute("pageTitle", "Alla befintliga bokningar");
+        model.addAttribute("tableHeadings", Arrays.asList("Kundens namn", "Rumsnamn", "Startdatum", "Slutdatum"));
+        model.addAttribute("emptyListMessage", "Inga bokningar hittades");
+        return "handleBooking.html";
+    }
+
+ */
 
     @RequestMapping("booking")
     public String handleBooking(Model model) {
+        List<DetailedBokningDto> bokningar = bokningService.getAllBookings();
+        model.addAttribute("bokningar", bokningar);
+        model.addAttribute("pageTitle", "Alla befintliga bokningar");
+        model.addAttribute("tableHeadings", Arrays.asList("Kundens namn", "Rumsnamn", "Startdatum", "Slutdatum"));
+        model.addAttribute("emptyListMessage", "Inga bokningar hittades");
         List<KundDto> kunder = kundService.getAllKundSimple();
         List<RumDto> rummen = rumService.getAllRumSimple();
         model.addAttribute("kunder", kunder);
@@ -49,6 +67,8 @@ public class BokningController {
         model.addAttribute("roomEmptyListMessage", "Inga rum hittades");
         return "handleBooking.html";
     }
+
+
 
 
         @PostMapping("/bookRoom")
