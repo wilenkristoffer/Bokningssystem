@@ -77,8 +77,4 @@ public class BokningServiceImpl implements BokningService {
         return "Bokning tillagd!";
     }
 
-    @Override
-    public List<DetailedBokningDto> getAllBokning() {
-        return bokningRepo.findAll().stream().map(b -> bokningToDetailedBokningDto(b)).toList();
-    }
 }
