@@ -20,6 +20,13 @@
     </div>
 </nav>
 
+<div th:if="${rummetRedanBokat}" class="alert alert-danger text-center" role="alert">
+    <span th:text="${rummetRedanBokat}"></span>
+</div>
+<div th:if="${bokningSuccess}" class="alert alert-success text-center" role="alert">
+    <span th:text="${bokningSuccess}"></span>
+</div>
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-lg-6">

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -53,6 +54,7 @@ public class BokningController {
         // Rum
         model.addAttribute("roomPageTitle", "Alla rum");
         model.addAttribute("roomEmptyListMessage", "Inga rum hittades");
+
         return "handleBooking.html";
     }
 
@@ -60,10 +62,18 @@ public class BokningController {
 
 
         @PostMapping("/bookRoom")
-        public String bookRoom(DetailedBokningDto detailedBokningDto) {
+        public String bookRoom(DetailedBokningDto detailedBokningDto, RedirectAttributes redirectAttributes) {
 
-            bokningService.addBokning(detailedBokningDto);
+            String message = bokningService.addBokningCheck(detailedBokningDto);
 
-            return "redirect:/booking";
+            if (message.equals("upptaget")) {
+                redirectAttributes.addFlashAttribute("rummetRedanBokat", "Rummet är redan bokat vid dessa datum.");
+                return "redirect:/booking";
+            }
+            else {
+                bokningService.addBokning(detailedBokningDto);
+                redirectAttributes.addFlashAttribute("bokningSuccess", "Bokningen är nu tillagd i systemet.");
+                return "redirect:/booking";
+            }
         }
 }

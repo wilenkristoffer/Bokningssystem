@@ -19,17 +19,13 @@ import java.util.List;
 
 
 @Service
+@RequiredArgsConstructor
 public class BokningServiceImpl implements BokningService {
 
     private final BokningRepo bokningRepo;
     private final KundRepo kundRepo;
     private final RumRepo rumRepo;
 
-    public BokningServiceImpl(BokningRepo bokningRepo, KundRepo kundRepo, RumRepo rumRepo){
-        this.bokningRepo=bokningRepo;
-        this.kundRepo=kundRepo;
-        this.rumRepo=rumRepo;
-    }
 
     @Override
     public BokningDto bokningToBokningDto(Bokning b) {
@@ -77,13 +73,35 @@ public class BokningServiceImpl implements BokningService {
                 .kund(kund)
                 .build();
     }
+
     @Override
     public String addBokning(DetailedBokningDto bokning) {
         Kund kund = kundRepo.findById(bokning.getKund().getId()).get();
         Rum rum = rumRepo.findById(bokning.getRoom().getId()).get();
-        bokningRepo.save(detailedBokningDtoToBokning(bokning, kund, rum));
 
-        return "Bokning tillagd!";
+        bokningRepo.save(detailedBokningDtoToBokning(bokning, kund, rum));
+        return "Bokning tillagd";
+    }
+
+    @Override
+    public String addBokningCheck(DetailedBokningDto bokning) {
+        Rum rum = rumRepo.findById(bokning.getRoom().getId()).get();
+
+        List<DetailedBokningDto> bookingsForRoom = getAllBookings().stream()
+                .filter(b -> b.getRoom().getId().equals(rum.getId()))
+                .toList();
+
+        boolean isDatesAvailable = bookingsForRoom.stream().noneMatch(existingBooking -> {
+            boolean overlaps = !existingBooking.getEndDate().isBefore(bokning.getStartDate())
+                    && !bokning.getEndDate().isBefore(existingBooking.getStartDate());
+            return overlaps;
+        });
+
+        if (!isDatesAvailable) {
+            return "upptaget";
+        } else {
+            return "fri";
+        }
     }
 
 }
