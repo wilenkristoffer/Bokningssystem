@@ -84,7 +84,7 @@ public class KundServiceImpl implements KundService {
 
     @Override
     public String deleteCustomerCheck(Long customerId) {
-        List<DetailedBokningDto> bookings = bokningService.getAllBokning().stream()
+        List<DetailedBokningDto> bookings = bokningService.getAllBookings().stream()
                 .filter(b -> b.getKund().getId().equals(customerId))
                 .toList();
 
