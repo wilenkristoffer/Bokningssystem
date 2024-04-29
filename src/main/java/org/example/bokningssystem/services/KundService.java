@@ -17,5 +17,6 @@ public interface KundService {
 
     public String addKund(DetailedKundDto kund);
     public String modifyKund(DetailedKundDto updatedKund);
+    public String deleteCustomerCheck(Long customerId);
     public String deleteCustomer(Long customerId);
 }

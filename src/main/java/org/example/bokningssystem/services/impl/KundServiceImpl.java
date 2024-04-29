@@ -2,8 +2,10 @@ package org.example.bokningssystem.services.impl;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.bokningssystem.dtos.DetailedBokningDto;
 import org.example.bokningssystem.dtos.DetailedKundDto;
 import org.example.bokningssystem.dtos.KundDto;
+import org.example.bokningssystem.modell.Bokning;
 import org.example.bokningssystem.modell.Kund;
 import org.example.bokningssystem.repo.KundRepo;
 import org.example.bokningssystem.services.BokningService;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -80,9 +83,25 @@ public class KundServiceImpl implements KundService {
         }
 
     @Override
-    public String deleteCustomer(Long customerId) {
-            kundRepo.deleteById(customerId);
-            return "Kunden har raderats!";
+    public String deleteCustomerCheck(Long customerId) {
+        List<DetailedBokningDto> bookings = bokningService.getAllBokning().stream()
+                .filter(b -> b.getKund().getId().equals(customerId))
+                .toList();
+
+        if (!bookings.isEmpty()) {
+            return "koppling";
+        } else {
+
+            return "fri";
         }
+
+        }
+
+    @Override
+    public String deleteCustomer(Long customerId) {
+        kundRepo.deleteById(customerId);
+        return "kunden har tagit borts";
+    }
+
 
 }

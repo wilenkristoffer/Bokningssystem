@@ -6,6 +6,8 @@ import org.example.bokningssystem.modell.Bokning;
 import org.example.bokningssystem.modell.Kund;
 import org.example.bokningssystem.modell.Rum;
 
+import java.util.List;
+
 public interface BokningService {
 
     public BokningDto bokningToBokningDto(Bokning b);
@@ -15,4 +17,5 @@ public interface BokningService {
     Bokning detailedBokningDtoToBokning(DetailedBokningDto b, Kund kund, Rum rum);
 
     public String addBokning(DetailedBokningDto bokning);
+    public List<DetailedBokningDto> getAllBokning();
 }

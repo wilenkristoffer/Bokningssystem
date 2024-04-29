@@ -15,6 +15,8 @@ import org.example.bokningssystem.repo.RumRepo;
 import org.example.bokningssystem.services.BokningService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class BokningServiceImpl implements BokningService {
@@ -73,5 +75,10 @@ public class BokningServiceImpl implements BokningService {
         bokningRepo.save(detailedBokningDtoToBokning(bokning, kund, rum));
 
         return "Bokning tillagd!";
+    }
+
+    @Override
+    public List<DetailedBokningDto> getAllBokning() {
+        return bokningRepo.findAll().stream().map(b -> bokningToDetailedBokningDto(b)).toList();
     }
 }

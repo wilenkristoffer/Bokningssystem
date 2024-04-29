@@ -61,13 +61,21 @@ public class KundController {
 
 
     @RequestMapping(path ="/customer/deleteById/{id}")
-    public String deleteById(@PathVariable Long id) {
-        kundService.deleteCustomer(id);
-        return "redirect:/customer";
+    public String deleteByIdCheck(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        String message = kundService.deleteCustomerCheck(id);
+
+        if (message.equals("koppling")) {
+            redirectAttributes.addFlashAttribute("kundFinnsBokad", "Kunden är kopplad till en bokning");
+            return "redirect:/customer";
+        }
+        else {
+            kundService.deleteCustomer(id);
+            redirectAttributes.addFlashAttribute("KundenTogsBort", "Kunden har blivit borttagen");
+            return "redirect:/customer";
+        }
+
 
     }
-
-
 
 
 

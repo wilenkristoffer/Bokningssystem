@@ -21,6 +21,13 @@
     <span th:text="${successMessage}"></span>
 </div>
 
+<div th:if="${kundFinnsBokad}" class="alert alert-danger text-center" role="alert">
+    <span th:text="${kundFinnsBokad}"></span>
+</div>
+<div th:if="${KundenTogsBort}" class="alert alert-success text-center" role="alert">
+    <span th:text="${KundenTogsBort}"></span>
+</div>
+
 <div class="container mt-5">
     <div class="row">
         <div class="col-lg-8 mx-auto">
