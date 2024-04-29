@@ -32,6 +32,8 @@
                         <th>Rumsnamn</th>
                         <th>Startdatum</th>
                         <th>Slutdatum</th>
+                        <th>Ändra</th>
+                        <th>Ta bort</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -40,6 +42,8 @@
                         <td th:text="${bokning.room.name}"></td>
                         <td th:text="${bokning.startDate}"></td>
                         <td th:text="${bokning.endDate}"></td>
+                        <td><button class="btn btn-dark edit-btn" data-id="${bokning.id}">Ändra</button></td>
+                        <td><a th:href="@{/booking/deleteById/{id}(id=${bokning.id})}">Ta bort</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -129,6 +133,7 @@
 
 
                     <button type="submit" class="btn btn-dark">Boka</button>
+                    <button type="submit" class="btn btn-dark">Ändra</button>
                 </form>
             </div>
         </div>

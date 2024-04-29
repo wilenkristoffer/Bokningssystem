@@ -16,10 +16,7 @@ import org.example.bokningssystem.services.KundService;
 import org.example.bokningssystem.services.RumService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -66,4 +63,26 @@ public class BokningController {
 
             return "redirect:/booking";
         }
+
+
+    @RequestMapping(path ="/booking/deleteById/{id}")
+    public String deleteById(@PathVariable Long id) {
+        bokningService.deleteBooking(id);
+        return "redirect:/booking";
+
+    }
+
+
+
 }
+
+/*
+    @PostMapping("modifyBooking")
+    public String modifyBooking(DetailedBokningDto bokning) {
+
+        bokningService.modifyBookning(bokning);
+
+        return "redirect:/booking";
+    }
+
+ */

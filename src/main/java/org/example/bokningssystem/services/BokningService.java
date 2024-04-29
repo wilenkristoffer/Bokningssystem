@@ -19,4 +19,6 @@ public interface BokningService {
     Bokning detailedBokningDtoToBokning(DetailedBokningDto b, Kund kund, Rum rum);
 
     public String addBokning(DetailedBokningDto bokning);
+    public String modifyBookning(DetailedBokningDto updatedBokning);
+    public String deleteBooking(Long bokningId);
 }
