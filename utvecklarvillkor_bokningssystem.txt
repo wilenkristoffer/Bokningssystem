@@ -1,0 +1,36 @@
+Villkor för Utveckling av Bokningssystemets Applikation
+
+Välkommen till vårt utvecklingsprojekt för bokningssystemets app! Innan du bidrar till projektet,
+ber vi dig vänligen att läsa igenom och acceptera följande villkor för utveckling:
+
+    1. Användning av Källkod och Resurser:
+
+    Genom att delta i vårt utvecklingsprojekt accepterar du att respektera och följa licensvillkoren för all källkod och resurser som tillhandahålls i projektet.
+    Denna applikation är avsedd för att underlätta bokningar och hantering av bokningsrelaterade data.
+
+    2. Bidrag och Versionhantering:
+
+    Vi välkomnar alla bidrag till projektet som förbättrar funktionaliteten, prestandan och användarupplevelsen av vår bokningsapp.
+    Alla bidrag, inklusive kodändringar, förbättringsförslag och felrapporter, ska göras genom vår versionshanteringsplattform (t.ex. GitHub).
+
+    3. Samarbete och Etikett:
+
+    Vi uppmuntrar till samarbete och öppen kommunikation i vårt utvecklingssamfund.
+    Genom att delta i projektet förbinder du dig att följa vår kodetikett och att samarbeta konstruktivt med andra bidragsgivare.
+    Det förväntas också att du inte skriver kod med avsikt att sabotera eller förstöra programmet.
+
+    4. Säkerhet och Dataskydd:
+
+    Säkerheten och integriteten hos våra användare är av yttersta vikt för oss. '
+    Genom att utveckla för vår bokningsapp godkänner du att följa våra riktlinjer för säker utveckling och att rapportera eventuella sårbarheter eller säkerhetsproblem till projektledningen.
+
+    5. Medskapare/Collaborator:
+
+    Genom att acceptera inbjudan att vara medskapare/collaborator för vårt projekt godkänner du automatiskt dessa villkor för utveckling.
+
+    6. Ansvarsbegränsning och Garantier:
+
+    Vi tillhandahåller källkoden och resurserna för projektet "som de är" och utan några garantier.
+    Vi ansvarar inte för eventuella förluster eller skador som uppstår till följd av användningen av källkoden eller bidrag till projektet.
+
+Genom att delta i vårt utvecklingsprojekt godkänner du dessa villkor för utveckling. Om du inte accepterar villkoren ber vi dig att avstå från att bidra till projektet.

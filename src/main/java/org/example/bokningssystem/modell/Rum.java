@@ -2,8 +2,7 @@ package org.example.bokningssystem.modell;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,9 +25,12 @@ public class Rum {
     @Size(min = 3, message = "Minst 3 bokstäver")
     private String name;
 
+    @NotNull(message = "Rumstyp får inte vara null")
     @Enumerated(EnumType.STRING)
     private Rumstyp rumstyp;
 
+    @Min(value = 0, message = "Måste vara minst 0")
+    @Max(value = 2, message = "Måste vara högst 2")
     private int antalSangar;
 
     @OneToMany(mappedBy = "room")
