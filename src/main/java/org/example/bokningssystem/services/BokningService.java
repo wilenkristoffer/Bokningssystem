@@ -20,4 +20,6 @@ public interface BokningService {
 
     public String addBokning(DetailedBokningDto bokning);
     public String addBokningCheck(DetailedBokningDto bokning);
+    public String modifyBookning(DetailedBokningDto updatedBokning);
+    public String deleteBooking(Long bokningId);
 }

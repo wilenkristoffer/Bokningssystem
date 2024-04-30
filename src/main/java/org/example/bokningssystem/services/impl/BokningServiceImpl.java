@@ -16,6 +16,7 @@ import org.example.bokningssystem.services.BokningService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -102,6 +103,31 @@ public class BokningServiceImpl implements BokningService {
         } else {
             return "fri";
         }
+    }
+
+    @Override
+    public String modifyBookning(DetailedBokningDto updatedBokning) {
+        Optional<Bokning> optionalBokning = bokningRepo.findById(updatedBokning.getId());
+        Optional<Kund> optionalKund = kundRepo.findById(updatedBokning.getKund().getId());
+        Optional<Rum> optionalRum = rumRepo.findById(updatedBokning.getRoom().getId());
+        Bokning existingBokning = optionalBokning.get();
+        Kund kund = optionalKund.get();
+        Rum rum = optionalRum.get();
+
+        existingBokning.setStartDate(updatedBokning.getStartDate());
+        existingBokning.setEndDate(updatedBokning.getEndDate());
+        existingBokning.setKund(kund);
+        existingBokning.setRoom(rum);
+
+        bokningRepo.save(existingBokning);
+
+        return "Bokningen har uppdaterats!";
+    }
+
+    @Override
+    public String deleteBooking(Long bokningId) {
+        bokningRepo.deleteById(bokningId);
+        return "kunden har tagit borts";
     }
 
 }
