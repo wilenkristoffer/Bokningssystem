@@ -89,7 +89,7 @@ public class BokningServiceImpl implements BokningService {
 
     @Override
     public String modifyBookning(DetailedBokningDto updatedBokning) {
-        Optional<Bokning> optionalBokning = bokningRepo.findById(Math.toIntExact(updatedBokning.getId()));
+        Optional<Bokning> optionalBokning = bokningRepo.findById(updatedBokning.getId());
         Optional<Kund> optionalKund = kundRepo.findById(updatedBokning.getKund().getId());
         Optional<Rum> optionalRum = rumRepo.findById(updatedBokning.getRoom().getId());
         Bokning existingBokning = optionalBokning.get();
@@ -108,7 +108,7 @@ public class BokningServiceImpl implements BokningService {
 
     @Override
     public String deleteBooking(Long bokningId) {
-        bokningRepo.deleteById(Math.toIntExact(bokningId));
+        bokningRepo.deleteById(bokningId);
         return "kunden har tagit borts";
     }
 

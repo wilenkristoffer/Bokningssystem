@@ -72,11 +72,6 @@ public class BokningController {
 
     }
 
-
-
-}
-
-/*
     @PostMapping("modifyBooking")
     public String modifyBooking(DetailedBokningDto bokning) {
 
@@ -85,4 +80,6 @@ public class BokningController {
         return "redirect:/booking";
     }
 
- */
+
+
+}
