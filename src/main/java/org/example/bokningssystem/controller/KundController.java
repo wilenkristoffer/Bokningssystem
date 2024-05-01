@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,6 +29,7 @@ public class KundController {
     @RequestMapping("customer")
     public String handleCustomer(Model model) {
         List<DetailedKundDto> kunder = kundService.getAllKunder();
+        model.addAttribute("kund", new DetailedKundDto());
         model.addAttribute("kunder", kunder);
         model.addAttribute("pageTitle", "Alla befintliga kunder");
         model.addAttribute("tableHeadings", Arrays.asList("Namn", "Email", "Telefon", "Personnummer"));
@@ -36,14 +38,16 @@ public class KundController {
     }
 
     @PostMapping("customerCreated")
-    public String create(@Valid DetailedKundDto kund, BindingResult result,
+    public String create(@Valid @ModelAttribute("kund") DetailedKundDto kund, BindingResult result,
                          Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()){
+            List<String> errors = result.getAllErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            model.addAttribute("errors", errors);
             model.addAttribute("kund", kund);
             model.addAttribute("kunder", kundService.getAllKunder());
             model.addAttribute("pageTitle", "Alla befintliga kunder");
-            model.addAttribute("tableHeadings", Arrays.asList("Namn", "Email", "Telefon", "Personnummer"));
-            model.addAttribute("emptyListMessage", "Inga kunder hittades");
             return "handleCustomer.html";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Kunden har lagts till!");
@@ -52,9 +56,21 @@ public class KundController {
     }
 
     @PostMapping("modifyCustomer")
-    public String modifyCustomer(DetailedKundDto kund) {
+    public String modifyCustomer(@Valid DetailedKundDto kund,
+                                 BindingResult result,
+                                 RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            List<String> errors = result.getAllErrors().stream()
+                    .map(error -> error.getDefaultMessage())
+                    .collect(Collectors.toList());
+            redirectAttributes.addFlashAttribute("errors", errors);
+            redirectAttributes.addFlashAttribute("kund", kund);
+            return "redirect:/customer";
+        }
 
         kundService.modifyKund(kund);
+        redirectAttributes.addFlashAttribute("successMessage", "Kund informationen har uppdaterats!");
 
         return "redirect:/customer";
     }

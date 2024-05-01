@@ -23,21 +23,21 @@ public class DetailedKundDto {
 
     @NotEmpty(message = "Måste fylla i fältet")
     @Size(min = 3, message = "Minst 3 bokstäver")
-    @Pattern(regexp="^[A-Öa-ö ]*$", message = "Bara bokstäver för namn")
+    @Pattern(regexp="^[A-Öa-ö ]*$", message = "Du får använda bara bokstäver för namn")
     private String namn;
 
     @NotEmpty(message = "Måste fylla i fältet")
-    @Email
+    @Email(message = "Du måste ha en @ i email.")
     private String email;
 
     @NotEmpty(message = "Måste fylla i fältet")
     @NumberFormat
-    @Size(min = 10, max = 15)
+    @Size(min = 10, max = 15, message = "Minst 10 och max 15 siffror")
     private String telefonNr;
 
     @NotEmpty(message = "Måste fylla i fältet")
     @NumberFormat
-    @Size(min = 10, max = 12)
+    @Size(min = 10, max = 12, message = "Minst 10 och max 12 siffror")
     private String personummer;
 
     private List<BokningDto> bokning;
