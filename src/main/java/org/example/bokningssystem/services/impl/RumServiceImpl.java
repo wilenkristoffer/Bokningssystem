@@ -2,9 +2,7 @@ package org.example.bokningssystem.services.impl;
 
 
 import lombok.RequiredArgsConstructor;
-import org.example.bokningssystem.dtos.DetailedKundDto;
-import org.example.bokningssystem.dtos.DetailedRumDto;
-import org.example.bokningssystem.dtos.RumDto;
+import org.example.bokningssystem.dtos.*;
 import org.example.bokningssystem.modell.Kund;
 import org.example.bokningssystem.modell.Rum;
 import org.example.bokningssystem.repo.RumRepo;
@@ -12,8 +10,10 @@ import org.example.bokningssystem.services.BokningService;
 import org.example.bokningssystem.services.RumService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -78,6 +78,32 @@ public class RumServiceImpl implements RumService {
 
         return "Rummet har uppdaterats!";
     }
+
+    @Override
+    public List<RumDto> getAvailableRum(SearchBokningDto searchBokningDto) {
+        List<DetailedBokningDto> allBookings = bokningService.getAllBookings();
+
+        LocalDate startDate = searchBokningDto.getStartDate();
+        LocalDate endDate = searchBokningDto.getEndDate();
+
+        List<RumDto> availableRooms = rumRepo.findAll().stream()
+                .filter(rum -> isRoomAvailable(rum, allBookings, startDate, endDate))
+                .map(this::rumToRumDto)
+                .collect(Collectors.toList());
+
+        return availableRooms;
+    }
+
+    private boolean isRoomAvailable(Rum rum, List<DetailedBokningDto> allBookings, LocalDate startDate, LocalDate endDate) {
+        return allBookings.stream()
+                .noneMatch(booking -> {
+                    LocalDate bookingStartDate = booking.getStartDate();
+                    LocalDate bookingEndDate = booking.getEndDate();
+                    return booking.getRoom().getId().equals(rum.getId()) &&
+                            !bookingEndDate.isBefore(startDate) && !endDate.isBefore(bookingStartDate);
+                });
+    }
+
 
 
 }

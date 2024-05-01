@@ -1,10 +1,7 @@
 package org.example.bokningssystem.services;
 
 
-import org.example.bokningssystem.dtos.DetailedBokningDto;
-import org.example.bokningssystem.dtos.DetailedKundDto;
-import org.example.bokningssystem.dtos.DetailedRumDto;
-import org.example.bokningssystem.dtos.RumDto;
+import org.example.bokningssystem.dtos.*;
 import org.example.bokningssystem.modell.Kund;
 import org.example.bokningssystem.modell.Rum;
 
@@ -19,4 +16,5 @@ public interface RumService {
     public String addRum(DetailedRumDto rum);
     public List<RumDto> getAllRumSimple();
     public String addBeds(DetailedRumDto rum);
+    public List<RumDto> getAvailableRum(SearchBokningDto b);
 }

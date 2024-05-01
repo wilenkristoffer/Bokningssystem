@@ -3,10 +3,7 @@ package org.example.bokningssystem.controller;
 
 import lombok.RequiredArgsConstructor;
 
-import org.example.bokningssystem.dtos.DetailedBokningDto;
-import org.example.bokningssystem.dtos.DetailedKundDto;
-import org.example.bokningssystem.dtos.KundDto;
-import org.example.bokningssystem.dtos.RumDto;
+import org.example.bokningssystem.dtos.*;
 import org.example.bokningssystem.modell.Kund;
 import org.example.bokningssystem.modell.Rum;
 import org.example.bokningssystem.repo.KundRepo;
@@ -40,14 +37,21 @@ public class BokningController {
     @RequestMapping("booking")
     public String handleBooking(Model model) {
         List<DetailedBokningDto> bokningar = bokningService.getAllBookings();
+        List<KundDto> kunder = kundService.getAllKundSimple();
+        List<RumDto> rummen = rumService.getAllRumSimple();
+
+        model.addAttribute("kunder", kunder);
+        model.addAttribute("rummen", rummen);
+
+
+        // Bokningar
         model.addAttribute("bokningar", bokningar);
         model.addAttribute("pageTitle", "Alla befintliga bokningar");
         model.addAttribute("tableHeadings", Arrays.asList("Kundens namn", "Rumsnamn", "Startdatum", "Slutdatum"));
         model.addAttribute("emptyListMessage", "Inga bokningar hittades");
-        List<KundDto> kunder = kundService.getAllKundSimple();
-        List<RumDto> rummen = rumService.getAllRumSimple();
-        model.addAttribute("kunder", kunder);
-        model.addAttribute("rummen", rummen);
+
+
+
         // Kunder
         model.addAttribute("customerPageTitle", "Alla kunder");
         model.addAttribute("customerEmptyListMessage", "Inga kunder hittades");
@@ -55,6 +59,8 @@ public class BokningController {
         // Rum
         model.addAttribute("roomPageTitle", "Alla rum");
         model.addAttribute("roomEmptyListMessage", "Inga rum hittades");
+        model.addAttribute("availableRoomPageTitle", "Alla lediga rum");
+        model.addAttribute("availableRoomEmptyListMessage", "Inga lediga rum hittades");
         return "handleBooking.html";
     }
 
@@ -86,9 +92,28 @@ public class BokningController {
     }
 
     @PostMapping("modifyBooking")
-    public String modifyBooking(DetailedBokningDto bokning) {
+    public String modifyBooking(DetailedBokningDto bokning, RedirectAttributes redirectAttributes) {
 
-        bokningService.modifyBookning(bokning);
+        String message = bokningService.addBokningCheck(bokning);
+
+        if (message.equals("upptaget")) {
+            redirectAttributes.addFlashAttribute("rummetRedanBokat", "Rummet är redan bokat vid dessa datum.");
+            return "redirect:/booking";
+        }
+        else {
+            bokningService.modifyBookning(bokning);
+            redirectAttributes.addFlashAttribute("modifySuccess", "Bokningen är nu ändrad.");
+            return "redirect:/booking";
+        }
+    }
+
+    @PostMapping("searchDate")
+    public String searchDate(SearchBokningDto searchBokningDto, RedirectAttributes redirectAttributes){
+
+        List<RumDto> ledigaRum = rumService.getAvailableRum(searchBokningDto);
+
+        redirectAttributes.addFlashAttribute("ledigaRum", ledigaRum);
+
 
         return "redirect:/booking";
     }

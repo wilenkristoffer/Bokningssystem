@@ -6,14 +6,12 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Bokningar - Personal</title>
-
     <link href="css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container px-5">
         <a class="navbar-brand" href="/">Hem</a>
@@ -25,6 +23,9 @@
 </div>
 <div th:if="${bokningSuccess}" class="alert alert-success text-center" role="alert">
     <span th:text="${bokningSuccess}"></span>
+</div>
+<div th:if="${modifySuccess}" class="alert alert-success text-center" role="alert">
+    <span th:text="${modifySuccess}"></span>
 </div>
 
 <main class="container mt-5">
@@ -89,7 +90,7 @@
         </form>
     </div>
 
-
+<hr>
     <section class="customer-room-selection row">
         <div class="col-lg-6">
             <div class="kunder" th:unless="${#lists.isEmpty(kunder)}">
@@ -162,47 +163,88 @@
             </form>
         </div>
     </section>
+
+    <hr>
+
+    <section class="searchDate-form mt-5">
+        <div class="col-lg-12 text-center">
+            <h2 class="mb-3">Sök lediga rum</h2>
+            <form id="searchDateForm" action="/searchDate" method="post" class="mb-4">
+                <div class="row mb-3">
+                    <div class="col">
+                        <label for="start_date_search" class="form-label">Start Date:</label>
+                        <input type="text" id="start_date_search" name="startDate" class="form-control" required>
+                    </div>
+                    <div class="col">
+                        <label for="end_date_search" class="form-label">End Date:</label>
+                        <input type="text" id="end_date_search" name="endDate" class="form-control" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-dark">Sök</button>
+            </form>
+        </div>
+    </section>
+
+    <div class="col-lg-6">
+        <div class="available-rooms">
+            <h2 th:text="${availableRoomPageTitle}" class="mb-3"></h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Namn</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="rum : ${ledigaRum}">
+                    <td th:text="${rum.name}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="no-rooms" th:if="${#lists.isEmpty(ledigaRum)}">
+                <p th:text="${availableRoomEmptyListMessage}"></p>
+            </div>
+        </div>
+    </div>
 </main>
 
 <footer class="py-5 bg-dark">
     <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; 2024</p></div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
 <script>
+
+    //För bokningsformuläret
     document.addEventListener('DOMContentLoaded', function () {
         flatpickr('#start_date', { dateFormat: 'Y-m-d', allowInput: true });
         flatpickr('#end_date', { dateFormat: 'Y-m-d', allowInput: true });
     });
 
-
+    //För modifieringsformuläret
     document.addEventListener('DOMContentLoaded', function () {
         flatpickr('#modifyStartDate', { dateFormat: 'Y-m-d', allowInput: true });
         flatpickr('#modifyEndDate', { dateFormat: 'Y-m-d', allowInput: true });
+    });
+    //För sökadatumformuläret
+    document.addEventListener('DOMContentLoaded', function () {
+        flatpickr('#start_date_search', { dateFormat: 'Y-m-d', allowInput: true });
+        flatpickr('#end_date_search', { dateFormat: 'Y-m-d', allowInput: true });
     });
 
 
     document.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             const row = btn.closest('tr');
-            const bookingId = row.dataset.id; // Corrected to dataset.id
+            const bookingId = row.dataset.id;
 
-            // Set the value of the hidden input field to the booking ID
             document.getElementById('modifyBookingId').value = bookingId;
 
-            // Modify the form action attribute
             document.getElementById('modifyBookingForm').action = "/modifyBooking";
 
-            // Show the modifyBookingForm
             document.getElementById('modifyBookingForm').style.display = 'block';
 
-            // Scroll to the form
             document.getElementById('modifyBookingForm').scrollIntoView({ behavior: 'smooth' });
         });
     });
-
 
     function updateCustomer(element) {
         var customerId = element.closest("tr").querySelector("td:first-child").innerText;
@@ -212,11 +254,10 @@
     function updateRoom(element) {
         var roomId = element.closest("tr").querySelector(".room-id").innerText;
         document.getElementById('selected_room').value = roomId;
-
     }
+
     function validateRadioButtons() {
         var radioButtons = document.querySelectorAll('.choose-radio');
-
         var isChecked = false;
         for (var i = 0; i < radioButtons.length; i++) {
             if (radioButtons[i].checked) {
@@ -224,23 +265,18 @@
                 break;
             }
         }
-
-
         if (!isChecked) {
             alert('Vänligen välj en kund och ett rum för att fortsätta!');
             return false;
         }
-
         return true;
     }
 
     document.getElementById('bookRoomForm').addEventListener('submit', function(event) {
-
         if (!validateRadioButtons()) {
             event.preventDefault();
         }
     });
 </script>
-
 </body>
 </html>
