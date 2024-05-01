@@ -17,6 +17,13 @@
     </div>
 </nav>
 
+<!-- Felmeddelanden visas här -->
+<div th:if="${!#lists.isEmpty(errors)}" class="alert alert-danger">
+    <ul>
+        <li th:each="error : ${errors}" th:text="${error}"></li>
+    </ul>
+</div>
+
 <div th:if="${successMessage}" class="alert alert-success text-center" role="alert">
     <span th:text="${successMessage}"></span>
 </div>
@@ -67,18 +74,30 @@
                     <div class="mb-3">
                         <label for="modifyName" class="form-label">Namn:</label>
                         <input type="text" id="modifyName" name="namn" class="form-control">
+                        <div th:if="${#fields.hasErrors('namn')}" class="alert alert-danger">
+                            <p th:each="err : ${#fields.errors('namn')}" th:text="${err}"></p>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="modifyEmail" class="form-label">Email:</label>
                         <input type="email" id="modifyEmail" name="email" class="form-control">
+                        <div th:if="${#fields.hasErrors('email')}" class="alert alert-danger">
+                            <p th:each="err : ${#fields.errors('email')}" th:text="${err}"></p>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="modifyPhone" class="form-label">Telefonnr:</label>
                         <input type="text" id="modifyPhone" name="telefonNr" class="form-control">
+                        <div th:if="${#fields.hasErrors('telefonNr')}" class="alert alert-danger">
+                            <p th:each="err : ${#fields.errors('telefonNr')}" th:text="${err}"></p>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="modifySsn" class="form-label">Personnummer:</label>
                         <input type="text" id="modifySsn" name="personummer" class="form-control">
+                        <div th:if="${#fields.hasErrors('personummer')}" class="alert alert-danger">
+                            <p th:each="err : ${#fields.errors('personummer')}" th:text="${err}"></p>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-dark">Spara</button>
                 </form>
@@ -90,18 +109,30 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Namn:</label>
                         <input type="text" id="name" name="namn" class="form-control">
+                        <div th:if="${#fields.hasErrors('namn')}" class="alert alert-danger">
+                            <p th:each="err : ${#fields.errors('namn')}" th:text="${err}"></p>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
                         <input type="email" id="email" name="email" class="form-control">
+                        <div th:if="${#fields.hasErrors('email')}" class="alert alert-danger">
+                            <p th:each="err : ${#fields.errors('email')}" th:text="${err}"></p>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Telefonnr:</label>
                         <input type="text" id="phone" name="telefonNr" class="form-control">
+                        <div th:if="${#fields.hasErrors('telefonNr')}" class="alert alert-danger">
+                            <p th:each="err : ${#fields.errors('telefonNr')}" th:text="${err}"></p>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="ssn" class="form-label">Personnr:</label>
                         <input type="text" id="ssn" name="personummer" class="form-control">
+                        <div th:if="${#fields.hasErrors('personummer')}" class="alert alert-danger">
+                            <p th:each="err : ${#fields.errors('personummer')}" th:text="${err}"></p>
+                        </div>
                     </div>
                     <button type="submit" class="btn btn-dark">Lägg till</button>
                 </form>
