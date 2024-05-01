@@ -56,16 +56,21 @@ public class KundControllerTest {
 
     @Test
     public void modifyCustomerTest() throws Exception {
-        mockMvc.perform(post("/modifyCustomer")
-                        .param("id", "1")
-                        .param("namn", "Modified Kund")
-                        .param("email", "modified@example.com")
-                        .param("telefonNr", "987654321")
-                        .param("personnummer", "987654-3210"))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/customer"));
+        DetailedKundDto kund = new DetailedKundDto();
+        kund.setId(1L);
+        kund.setNamn("Modified Kund");
+        kund.setEmail("modified@example.com");
+        kund.setTelefonNr("987654321");
+        kund.setPersonummer("987654-3210");
 
-        verify(kundService, times(1)).modifyKund(any(DetailedKundDto.class));
+        mockMvc.perform(post("/modifyCustomer")
+                        .flashAttr("kund", kund))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/customer"))
+                .andExpect(flash().attributeExists("errors"));
+
+        verify(kundService, times(0)).modifyKund(any(DetailedKundDto.class));
     }
+
 
 
     @Test
