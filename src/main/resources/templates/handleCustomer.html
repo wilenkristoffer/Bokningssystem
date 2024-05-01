@@ -119,14 +119,14 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="phone" class="form-label">Telefonnr:</label>
+                        <label for="phone" class="form-label">Telefonnummer:</label>
                         <input type="text" id="phone" name="telefonNr" class="form-control" th:field="*{telefonNr}">
                         <div th:if="${#fields.hasErrors('telefonNr')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('telefonNr')}" th:text="${err}"></p>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="ssn" class="form-label">Personnr:</label>
+                        <label for="ssn" class="form-label">Personnummer:</label>
                         <input type="text" id="ssn" name="personummer" class="form-control" th:field="*{personummer}">
                         <div th:if="${#fields.hasErrors('personummer')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('personummer')}" th:text="${err}"></p>

@@ -56,7 +56,7 @@ public class KundController {
     }
 
     @PostMapping("modifyCustomer")
-    public String modifyCustomer(DetailedKundDto kund,
+    public String modifyCustomer(@Valid DetailedKundDto kund,
                                  BindingResult result,
                                  RedirectAttributes redirectAttributes) {
 
@@ -65,12 +65,12 @@ public class KundController {
                     .map(error -> error.getDefaultMessage())
                     .collect(Collectors.toList());
             redirectAttributes.addFlashAttribute("errors", errors);
-            redirectAttributes.addFlashAttribute("kund", kund); // Möjligen behöver detta justeras beroende på vylogik
+            redirectAttributes.addFlashAttribute("kund", kund);
             return "redirect:/customer";
         }
 
         kundService.modifyKund(kund);
-        redirectAttributes.addFlashAttribute("successMessage", "Kundinformationen har uppdaterats!");
+        redirectAttributes.addFlashAttribute("successMessage", "Kund informationen har uppdaterats!");
 
         return "redirect:/customer";
     }
