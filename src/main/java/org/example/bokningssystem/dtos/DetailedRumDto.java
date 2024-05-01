@@ -1,7 +1,8 @@
 package org.example.bokningssystem.dtos;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,12 @@ public class DetailedRumDto {
     private String name;
 
 
+    @NotNull(message = "Rumstyp får inte vara null")
+    @Enumerated(EnumType.STRING)
     private Rumstyp rumstyp;
+
+    @Min(value = 0, message = "Måste vara minst 0")
+    @Max(value = 2, message = "Måste vara högst 2")
     private int antalSangar;
 
     private List<BokningDto> bokning;
