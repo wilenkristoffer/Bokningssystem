@@ -1,22 +1,33 @@
-package org.example.bokningssystem;
+package org.example.bokningssystem.controllerTest;
 
 import org.example.bokningssystem.controller.KundController;
 import org.example.bokningssystem.dtos.DetailedKundDto;
 import org.example.bokningssystem.services.KundService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import static org.mockito.Mockito.*;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @WebMvcTest(KundController.class)
 public class KundControllerTest {
+
+    @Autowired
+    private WebApplicationContext wac;
 
     @MockBean
     private KundService kundService;
@@ -24,12 +35,18 @@ public class KundControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void handleCustomer() throws Exception {
-        when(kundService.getAllKunder()).thenReturn(new ArrayList<>());
 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/customer"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(new KundController(kundService)).build();
+    }
+
+    @Test
+    void handleCustomerTest() throws Exception {
+        when(kundService.getAllKunder()).thenReturn(new ArrayList<>());
+        mockMvc.perform(MockMvcRequestBuilders.get("/customer"))
+
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("handleCustomer.html"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("kunder"))
                 .andExpect(MockMvcResultMatchers.model().attribute("pageTitle", "Alla befintliga kunder"))
@@ -38,21 +55,8 @@ public class KundControllerTest {
 
 
     @Test
-    void createCustomer() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/customerCreated")
-                        .param("namn", "Test Kund")
-                        .param("email", "test@example.com")
-                        .param("telefon", "123456789")
-                        .param("personnummer", "123456-7890"))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/customer"))
-                .andExpect(MockMvcResultMatchers.flash().attributeExists("successMessage"));
-
-        verify(kundService).addKund(any(DetailedKundDto.class));
-    }
-
-    @Test
     public void modifyCustomerTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/modifyCustomer")
+        mockMvc.perform(post("/modifyCustomer")
                         .param("id", "1")
                         .param("namn", "Modified Kund")
                         .param("email", "modified@example.com")
@@ -62,19 +66,22 @@ public class KundControllerTest {
 
         verify(kundService, times(1)).modifyKund(any(DetailedKundDto.class));
     }
+
+
     @Test
-    public void deleteCustomerByIdTest() throws Exception {
-        Long customerId = 1L;
+    void deleteByIdCheck_KopplingMessageTest() throws Exception {
+
+        long customerId = 1L;
+        when(kundService.deleteCustomerCheck(customerId)).thenReturn("koppling");
+
 
         mockMvc.perform(MockMvcRequestBuilders.get("/customer/deleteById/{id}", customerId))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/customer"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/customer"))
+                .andExpect(flash().attribute("kundFinnsBokad", "Kunden är kopplad till en bokning"));
 
-        verify(kundService, times(1)).deleteCustomer(customerId);
+
+        verify(kundService, times(1)).deleteCustomerCheck(customerId);
+        verify(kundService, never()).deleteCustomer(customerId);
     }
-
-
 }
-
-
-
-

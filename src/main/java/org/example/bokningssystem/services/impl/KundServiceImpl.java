@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class KundServiceImpl implements KundService {
 
     private final KundRepo kundRepo;
+
     private final BokningService bokningService;
 
     @Override

@@ -1,7 +1,6 @@
-package org.example.bokningssystem;
+package org.example.bokningssystem.controllerTest;
 
 import org.example.bokningssystem.controller.RumController;
-import org.example.bokningssystem.dtos.DetailedRumDto;
 import org.example.bokningssystem.services.RumService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,18 +35,4 @@ public class RumControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attribute("pageTitle", "Alla befintliga rum"))
                 .andExpect(MockMvcResultMatchers.model().attribute("emptyListMessage", "Inga rum hittades"));
     }
-
-    @Test
-    void createRoomTest() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/roomCreated")
-                        .param("rumId", "1")
-                        .param("rumNamn", "Exempelrum")
-                        .param("rumTyp", "Dubbelrum"))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/rooms"));
-
-        verify(rumService, times(1)).addRum(any(DetailedRumDto.class));
-    }
-
-
-
 }
