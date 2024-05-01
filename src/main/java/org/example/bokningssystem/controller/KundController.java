@@ -29,6 +29,7 @@ public class KundController {
     @RequestMapping("customer")
     public String handleCustomer(Model model) {
         List<DetailedKundDto> kunder = kundService.getAllKunder();
+        model.addAttribute("kund", new DetailedKundDto());
         model.addAttribute("kunder", kunder);
         model.addAttribute("pageTitle", "Alla befintliga kunder");
         model.addAttribute("tableHeadings", Arrays.asList("Namn", "Email", "Telefon", "Personnummer"));
@@ -37,7 +38,7 @@ public class KundController {
     }
 
     @PostMapping("customerCreated")
-    public String create(@Valid DetailedKundDto kund, BindingResult result,
+    public String create(@Valid @ModelAttribute("kund") DetailedKundDto kund, BindingResult result,
                          Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()){
             List<String> errors = result.getAllErrors().stream()
@@ -47,7 +48,7 @@ public class KundController {
             model.addAttribute("kund", kund);
             model.addAttribute("kunder", kundService.getAllKunder());
             model.addAttribute("pageTitle", "Alla befintliga kunder");
-            return "redirect:/customer";
+            return "handleCustomer.html";
         }
         redirectAttributes.addFlashAttribute("successMessage", "Kunden har lagts till!");
         kundService.addKund(kund);

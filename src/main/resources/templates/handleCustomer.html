@@ -6,7 +6,6 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>Pensionat - Personal</title>
-
     <link href="css/styles.css" rel="stylesheet" />
 </head>
 <body>
@@ -17,7 +16,6 @@
     </div>
 </nav>
 
-<!-- Felmeddelanden visas här -->
 <div th:if="${!#lists.isEmpty(errors)}" class="alert alert-danger">
     <ul>
         <li th:each="error : ${errors}" th:text="${error}"></li>
@@ -58,7 +56,7 @@
                         <td th:text="${kund.telefonNr}"></td>
                         <td th:text="${kund.personummer}"></td>
                         <td><button class="btn btn-dark edit-btn" data-id="${kund.id}">Ändra</button></td>
-                        <td><a th:href="@{/customer/deleteById/{id}(id=${kund.id})}">Ta bort</a></td>
+                        <td><a th:href="@{/customer/deleteById/{id}(id=${kund.id})}" class="btn btn-danger">Ta bort</a></td>
                     </tr>
                     </tbody>
                 </table>
@@ -69,32 +67,32 @@
 
             <div id="modifyCustomerForm" class="modify-customer" style="display: none;">
                 <h2 class="mb-3">Ändra kund</h2>
-                <form action="/modifyCustomer" method="post" class="mb-4">
-                    <input type="hidden" id="modifyCustomerId" name="id" value="">
+                <form action="/modifyCustomer" method="post" class="mb-4" th:object="${kund}">
+                    <input type="hidden" id="modifyCustomerId" name="id" value="" th:field="*{id}">
                     <div class="mb-3">
                         <label for="modifyName" class="form-label">Namn:</label>
-                        <input type="text" id="modifyName" name="namn" class="form-control">
+                        <input type="text" id="modifyName" name="namn" class="form-control" th:field="*{namn}">
                         <div th:if="${#fields.hasErrors('namn')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('namn')}" th:text="${err}"></p>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="modifyEmail" class="form-label">Email:</label>
-                        <input type="email" id="modifyEmail" name="email" class="form-control">
+                        <input type="email" id="modifyEmail" name="email" class="form-control" th:field="*{email}">
                         <div th:if="${#fields.hasErrors('email')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('email')}" th:text="${err}"></p>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="modifyPhone" class="form-label">Telefonnr:</label>
-                        <input type="text" id="modifyPhone" name="telefonNr" class="form-control">
+                        <input type="text" id="modifyPhone" name="telefonNr" class="form-control" th:field="*{telefonNr}">
                         <div th:if="${#fields.hasErrors('telefonNr')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('telefonNr')}" th:text="${err}"></p>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="modifySsn" class="form-label">Personnummer:</label>
-                        <input type="text" id="modifySsn" name="personummer" class="form-control">
+                        <input type="text" id="modifySsn" name="personummer" class="form-control" th:field="*{personummer}">
                         <div th:if="${#fields.hasErrors('personummer')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('personummer')}" th:text="${err}"></p>
                         </div>
@@ -105,31 +103,31 @@
 
             <div class="add-customer">
                 <h2 class="mb-3">Registrera ny kund</h2>
-                <form action="customerCreated" method="post" class="mb-4">
+                <form action="customerCreated" method="post" class="mb-4" th:object="${kund}">
                     <div class="mb-3">
                         <label for="name" class="form-label">Namn:</label>
-                        <input type="text" id="name" name="namn" class="form-control">
+                        <input type="text" id="name" name="namn" class="form-control" th:field="*{namn}">
                         <div th:if="${#fields.hasErrors('namn')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('namn')}" th:text="${err}"></p>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
-                        <input type="email" id="email" name="email" class="form-control">
+                        <input type="email" id="email" name="email" class="form-control" th:field="*{email}">
                         <div th:if="${#fields.hasErrors('email')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('email')}" th:text="${err}"></p>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Telefonnr:</label>
-                        <input type="text" id="phone" name="telefonNr" class="form-control">
+                        <input type="text" id="phone" name="telefonNr" class="form-control" th:field="*{telefonNr}">
                         <div th:if="${#fields.hasErrors('telefonNr')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('telefonNr')}" th:text="${err}"></p>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="ssn" class="form-label">Personnr:</label>
-                        <input type="text" id="ssn" name="personummer" class="form-control">
+                        <input type="text" id="ssn" name="personummer" class="form-control" th:field="*{personummer}">
                         <div th:if="${#fields.hasErrors('personummer')}" class="alert alert-danger">
                             <p th:each="err : ${#fields.errors('personummer')}" th:text="${err}"></p>
                         </div>
@@ -166,7 +164,6 @@
         });
     });
 </script>
-
 
 </body>
 </html>
