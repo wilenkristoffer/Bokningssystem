@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.example.bokningssystem.modell.Shippers;
 import org.example.bokningssystem.repo.ShippersRepo;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
 
-@Component
+@SpringBootApplication
 public class FetchShippers implements CommandLineRunner {
 
     private final ShippersRepo shippersRepo;
