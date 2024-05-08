@@ -47,12 +47,19 @@ public class Kund {
     private List<Bokning> kundBokning;
 
 
-    public Kund(String namn, String email, String telefonNr, String personummer) {
+    public Kund(String namn, String email, String telefonNr, String personummer, List<Bokning> kundBokning) {
         this.namn = namn;
         this.email = email;
         this.telefonNr = telefonNr;
         this.personummer = personummer;
+        this.kundBokning = kundBokning;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

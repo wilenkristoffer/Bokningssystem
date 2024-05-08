@@ -19,4 +19,8 @@ public class DetailedBokningDto {
     private LocalDate endDate;
     private KundDto kund;
     private RumDto room;
+
+    public DetailedBokningDto(KundDto kund) {
+        this.kund = kund;
+    }
 }
