@@ -5,11 +5,12 @@ import org.example.bokningssystem.modell.Shippers;
 import org.example.bokningssystem.repo.ShippersRepo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
 
-@SpringBootApplication
+@ComponentScan
 public class FetchShippers implements CommandLineRunner {
 
     private final ShippersRepo shippersRepo;
