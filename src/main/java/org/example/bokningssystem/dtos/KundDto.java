@@ -13,5 +13,6 @@ import lombok.NoArgsConstructor;
 public class KundDto {
     private Long id;
     private String namn;
+    private String email;
     //Kan tillägga mer kanske?
 }

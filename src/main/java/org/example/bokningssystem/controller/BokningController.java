@@ -4,13 +4,10 @@ package org.example.bokningssystem.controller;
 import lombok.RequiredArgsConstructor;
 
 import org.example.bokningssystem.dtos.*;
-import org.example.bokningssystem.modell.Kund;
-import org.example.bokningssystem.modell.Rum;
-import org.example.bokningssystem.repo.KundRepo;
-import org.example.bokningssystem.repo.RumRepo;
 import org.example.bokningssystem.services.BokningService;
 import org.example.bokningssystem.services.KundService;
 import org.example.bokningssystem.services.RumService;
+import org.example.bokningssystem.services.impl.BlackListServiceImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,8 +28,7 @@ public class BokningController {
     private final BokningService bokningService;
     private final KundService kundService;
     private final RumService rumService;
-    private final RumRepo rumRepo;
-    private final KundRepo kundRepo;
+    private final BlackListServiceImpl blackListServiceImpl;
 
     @RequestMapping("booking")
     public String handleBooking(Model model) {
@@ -66,23 +62,27 @@ public class BokningController {
 
 
 
+    @PostMapping("/bookRoom")
+    public String bookRoom(DetailedBokningDto detailedBokningDto, RedirectAttributes redirectAttributes) {
+        String customerEmail = detailedBokningDto.getKund().getEmail();
 
-        @PostMapping("/bookRoom")
-        public String bookRoom(DetailedBokningDto detailedBokningDto, RedirectAttributes redirectAttributes) {
-
-            String message = bokningService.addBokningCheck(detailedBokningDto);
-
-            if (message.equals("upptaget")) {
-                redirectAttributes.addFlashAttribute("rummetRedanBokat", "Rummet är redan bokat vid dessa datum.");
-                return "redirect:/booking";
-            }
-            else {
-                bokningService.addBokning(detailedBokningDto);
-                redirectAttributes.addFlashAttribute("bokningSuccess", "Bokningen är nu tillagd i systemet.");
-                return "redirect:/booking";
-            }
+        if (blackListServiceImpl.isCustomerBlacklisted(customerEmail)) {
+            redirectAttributes.addFlashAttribute("blacklistError", "Kunden är blacklistad och får inte göra bokning!");
+            return "redirect:/booking";
         }
 
+        String message = bokningService.addBokningCheck(detailedBokningDto);
+
+        if (message.equals("upptaget")) {
+            redirectAttributes.addFlashAttribute("rummetRedanBokat", "Rummet är redan bokat vid dessa datum.");
+            return "redirect:/booking";
+        }
+        else {
+            bokningService.addBokning(detailedBokningDto);
+            redirectAttributes.addFlashAttribute("bokningSuccess", "Bokningen är nu tillagd i systemet.");
+            return "redirect:/booking";
+        }
+    }
 
     @RequestMapping(path ="/booking/deleteById/{id}")
     public String deleteById(@PathVariable Long id) {

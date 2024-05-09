@@ -27,7 +27,7 @@ public class KundServiceImpl implements KundService {
     @Override
     public KundDto kundToKundDto(Kund k) {
         return KundDto.builder().id(k.getId())
-                .namn(k.getNamn()).build();
+                .namn(k.getNamn()).email(k.getEmail()).build();
     }
 
     @Override

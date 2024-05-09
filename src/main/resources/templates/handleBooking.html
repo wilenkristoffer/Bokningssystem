@@ -21,6 +21,9 @@
 <div th:if="${rummetRedanBokat}" class="alert alert-danger text-center" role="alert">
     <span th:text="${rummetRedanBokat}"></span>
 </div>
+<div th:if="${blacklistError}" class="alert alert-danger text-center" role="alert">
+    <span th:text="${blacklistError}"></span>
+</div>
 <div th:if="${bokningSuccess}" class="alert alert-success text-center" role="alert">
     <span th:text="${bokningSuccess}"></span>
 </div>
@@ -107,6 +110,7 @@
                     <tr th:each="kund : ${kunder}">
                         <td><span class="hidden customer-id" th:text="${kund.id}"></span></td>
                         <td th:text="${kund.namn}"></td>
+                        <td class="customer-email" th:text="${kund.email}" style="display:none;"></td>
                         <td><input type="radio" class="choose-radio" name="kund" data-id="${kund.id}" onclick="updateCustomer(this)"></td>
                     </tr>
                     </tbody>
@@ -149,6 +153,7 @@
             <form id="bookRoomForm" action="/bookRoom" method="post" class="mb-4">
                 <input type="hidden" id="selected_customer" name="kund.id">
                 <input type="hidden" id="selected_room" name="room.id">
+                <input type="hidden" id="selected_customer_email" name="kund.email">
                 <div class="row mb-3">
                     <div class="col">
                         <label for="start_date" class="form-label">Start Date:</label>
@@ -247,8 +252,12 @@
     });
 
     function updateCustomer(element) {
-        var customerId = element.closest("tr").querySelector("td:first-child").innerText;
+        var row = element.closest("tr");
+        var customerId = row.querySelector(".customer-id").innerText;
+        var customerEmail = row.querySelector(".customer-email").innerText;
+
         document.getElementById('selected_customer').value = customerId;
+        document.getElementById('selected_customer_email').value = customerEmail;
     }
 
     function updateRoom(element) {

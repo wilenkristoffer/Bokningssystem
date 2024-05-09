@@ -51,7 +51,7 @@ public class BokningServiceImpl implements BokningService {
     @Override
     public DetailedBokningDto bokningToDetailedBokningDto(Bokning b) {
         return DetailedBokningDto.builder().id(b.getId())
-                .kund(new KundDto(b.getKund().getId(), b.getKund().getNamn()))
+                .kund(new KundDto(b.getKund().getId(), b.getKund().getNamn(), b.getKund().getEmail()))
                 .room(new RumDto(b.getRoom().getId(), b.getRoom().getName()))
                 .startDate(b.getStartDate())
                 .endDate(b.getEndDate())
