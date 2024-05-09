@@ -2,6 +2,7 @@ package org.example.bokningssystem.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.bokningssystem.dtos.ContractCustomerDto;
+import org.example.bokningssystem.dtos.DetailedContractCustomerDto;
 import org.example.bokningssystem.services.ContractCustomerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,15 +25,21 @@ public class ContractCustomerController {
 
         model.addAttribute("contractCustomers", contractCustomers);
         model.addAttribute("emptyListMessage", "Inga företagskunder hittades");
-            return "contractCustomers.html";
+            return "contractCustomers";
         }
-    @GetMapping("/customer/details")
+    @GetMapping("/allDetails")
     public String getCustomerDetails(Long customerId, RedirectAttributes redirectAttributes) {
 
-        redirectAttributes.addFlashAttribute("customerId", customerId);
+        DetailedContractCustomerDto customer = contractCustomerService.getCustomerById(customerId);
 
+        redirectAttributes.addFlashAttribute("customerAllinfo", customer);
 
-        return "customerDetails.html";
+        return "redirect:/customerDetails";
+    }
+    @RequestMapping("/customerDetails")
+    public String customerDetails(){
+        return "customerDetails";
+
     }
 }
 

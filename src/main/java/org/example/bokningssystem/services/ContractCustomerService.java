@@ -18,4 +18,6 @@ public interface ContractCustomerService {
     public DetailedContractCustomerDto contractCustomerToDetailedContractCustomerDto(ContractCustomer c);
 
     public List<DetailedContractCustomerDto> getAllCustomers();
+
+    DetailedContractCustomerDto getCustomerById(Long customerId);
 }

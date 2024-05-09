@@ -29,7 +29,7 @@
             <tbody>
             <tr th:each="customer : ${contractCustomers}" th:data-customer-id="${customer.id}">
                 <td>
-                    <a href="customerDetails.html" class="customer-link" th:text="${customer.companyName}" th:attr="data-customer-id=${customer.id}"></a>
+                    <a class="customer-link" th:text="${customer.companyName}" th:attr="data-customer-id=${customer.id}"></a>
                 </td>
                 <td th:text="${customer.contactName}"></td>
                 <td th:text="${customer.country}"></td>
@@ -45,7 +45,7 @@
         if (target) {
             const customerId = target.getAttribute('data-customer-id');
 
-            window.location.href = '/customer/details?customerId=' + customerId;
+            window.location.href = '/allDetails?customerId=' + customerId;
         }
     });
 </script>

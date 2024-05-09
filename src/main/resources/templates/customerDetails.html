@@ -33,16 +33,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="customer : ${contractCustomers}" th:data-customer-id="${customer.id}">
-                <td th:text="${customer.companyName}"></td>
-                <td th:text="${customer.contactName}"></td>
-                <td th:text="${customer.contactTitle}"></td>
-                <td th:text="${customer.streetAddress}"></td>
-                <td th:text="${customer.city}"></td>
-                <td th:text="${customer.postalCode}"></td>
-                <td th:text="${customer.country}"></td>
-                <td th:text="${customer.phone}"></td>
-                <td th:text="${customer.fax}"></td>
+            <tr th:if="${customerAllinfo != null}">
+                <td th:text="${customerAllinfo.companyName}"></td>
+                <td th:text="${customerAllinfo.contactName}"></td>
+                <td th:text="${customerAllinfo.contactTitle}"></td>
+                <td th:text="${customerAllinfo.streetAddress}"></td>
+                <td th:text="${customerAllinfo.city}"></td>
+                <td th:text="${customerAllinfo.postalCode}"></td>
+                <td th:text="${customerAllinfo.country}"></td>
+                <td th:text="${customerAllinfo.phone}"></td>
+                <td th:text="${customerAllinfo.fax}"></td>
             </tr>
             </tbody>
         </table>

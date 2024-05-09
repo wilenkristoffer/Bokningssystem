@@ -9,6 +9,7 @@ import org.example.bokningssystem.services.ContractCustomerService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -47,5 +48,16 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     @Override
     public List<DetailedContractCustomerDto> getAllCustomers() {
         return contractCustomerRepo.findAll().stream().map(this::contractCustomerToDetailedContractCustomerDto).toList();
+    }
+
+    @Override
+    public DetailedContractCustomerDto getCustomerById(Long customerId) {
+        Optional<ContractCustomer> customerOptional = contractCustomerRepo.findById(customerId);
+
+            ContractCustomer customer = customerOptional.get();
+
+            return contractCustomerToDetailedContractCustomerDto(customer);
+
+
     }
 }
