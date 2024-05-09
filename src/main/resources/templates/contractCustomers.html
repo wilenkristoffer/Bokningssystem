@@ -29,16 +29,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="customers : ${contractCustomers}" th:data-id="${contractCustomer.id}">
+            <tr th:each="customers : ${contractCustomers}">
                 <td th:text="${customers.companyName}"></td>
                 <td th:text="${customers.contactName}"></td>
                 <td th:text="${customers.country}"></td>
             </tr>
             </tbody>
         </table>
-        <div th:if="${#lists.isEmpty(customers)}">
-            <p th:text="${emptyListMessage}"></p>
-        </div>
     </section>
 </main>
 
