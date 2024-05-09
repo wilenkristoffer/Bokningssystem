@@ -27,17 +27,14 @@ public class BlackListServiceImpl {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("API Response: " + response.body());
 
             BlackList[] blacklistEntries = objectMapper.readValue(response.body(), BlackList[].class);
             boolean isBlacklisted = Arrays.stream(blacklistEntries)
                     .anyMatch(entry -> entry.getEmail().equalsIgnoreCase(email) && !entry.isOk());
 
-            System.out.println("Checking if " + email + " is blacklisted: " + isBlacklisted);
             return isBlacklisted;
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Error during blacklist check for " + email);
             return false;
         }
     }

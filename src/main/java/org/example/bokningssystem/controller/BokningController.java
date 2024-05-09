@@ -66,23 +66,11 @@ public class BokningController {
     public String bookRoom(DetailedBokningDto detailedBokningDto, RedirectAttributes redirectAttributes) {
         String customerEmail = detailedBokningDto.getKund().getEmail();
 
-        // Log the email being checked
-        System.out.println("Attempting to book room for " + customerEmail);
-
-        // Check if the customer is blacklisted
         if (blackListServiceImpl.isCustomerBlacklisted(customerEmail)) {
-            System.out.println("Booking failed: " + customerEmail + " is blacklisted.");
-            redirectAttributes.addFlashAttribute("blacklistError", "The customer is blacklisted and cannot book.");
-            return "redirect:/booking";
-        } else {
-            bokningService.addBokning(detailedBokningDto);
-            System.out.println("Booking successful for " + customerEmail);
-            redirectAttributes.addFlashAttribute("bokningSuccess", "The booking has been successfully added.");
+            redirectAttributes.addFlashAttribute("blacklistError", "Kunden är blacklistad och får inte göra bokning!");
             return "redirect:/booking";
         }
-    }
 
-    /*
         String message = bokningService.addBokningCheck(detailedBokningDto);
 
         if (message.equals("upptaget")) {
@@ -94,9 +82,7 @@ public class BokningController {
             redirectAttributes.addFlashAttribute("bokningSuccess", "Bokningen är nu tillagd i systemet.");
             return "redirect:/booking";
         }
-
- */
-
+    }
 
     @RequestMapping(path ="/booking/deleteById/{id}")
     public String deleteById(@PathVariable Long id) {
