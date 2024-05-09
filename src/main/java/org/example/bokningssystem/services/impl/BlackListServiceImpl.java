@@ -75,4 +75,88 @@ public class BlackListServiceImpl {
             System.err.println("Error occurred while adding email to blacklist.");
         }
     }
+
+
+
+    private BlackList getBlackListByEmail(String email) throws URISyntaxException {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("https://javabl.systementor.se/api/skt/blacklist"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            BlackList[] blacklistEntries = objectMapper.readValue(response.body(), BlackList[].class);
+            return Arrays.stream(blacklistEntries)
+                    .filter(entry -> entry.getEmail().equalsIgnoreCase(email))
+                    .findFirst()
+                    .orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void removeEmailFromBlackList(String email, boolean newStatus) throws URISyntaxException {
+        try {
+            BlackList currentEntry = getBlackListByEmail(email);
+            if (currentEntry == null) {
+                System.err.println("Email not found in the blacklist.");
+                return;
+            }
+
+            // Update the 'ok' status
+            currentEntry.setOk(newStatus);
+
+            String jsonPayload = objectMapper.writeValueAsString(currentEntry);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("https://javabl.systementor.se/api/skt/blacklist"))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(jsonPayload, StandardCharsets.UTF_8))
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+
+            if (response.statusCode() == 200) {
+                System.out.println("Email removed from remote blacklist successfully.");
+            } else {
+                System.err.println("Failed to remove email from remote blacklist: " + response.body());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println("Error occurred while removing email from blacklist.");
+        }
+    }
+
+
+
+/*
+
+    ///Gets error status 405 which means that api doesnt support delete().
+    public void removeEmailFromBlackList(String email){
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("https://javabl.systementor.se/api/skt/blacklist"))
+                    .DELETE()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                System.out.println("Email removed from remote blacklist successfully.");
+            } else {
+                System.err.println("Failed to remove email from remote blacklist: " + response.body());
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+ */
+
 }

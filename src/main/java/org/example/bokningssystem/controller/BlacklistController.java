@@ -22,14 +22,31 @@ public class BlacklistController {
     private BlackListServiceImpl blackListService;
 
     @PostMapping("/addEmail")
-    public String addEmailToBlacklist(@RequestParam("email") String email, Model model) {
-        try {
-            blackListService.addEmailToBlackList(email);
-            model.addAttribute("message", "Email added to blacklist successfully.");
-        } catch (URISyntaxException e) {
-            model.addAttribute("message", "Error adding email to blacklist: " + e.getMessage());
-            e.printStackTrace();
-        }
+    public String addEmailToBlacklist(@RequestParam("email") String email, Model model) throws URISyntaxException {
+
+        blackListService.addEmailToBlackList(email);
+        model.addAttribute("message", "Email added to blacklist successfully.");
+
         return "blacklist.html";
     }
+
+    @PostMapping("/removeEmail")
+    public String removeEmailFromBlacklist(@RequestParam("email") String email, Model model) throws URISyntaxException {
+        blackListService.removeEmailFromBlackList(email, true);
+        model.addAttribute("message", "Email removed from blacklist successfully.");
+        return "blacklist.html";
+    }
+
+
+/*
+
+    ////For delete() in BlackListServiceImpl
+    @PostMapping("/removeEmail")
+    public String removeEmailFromBlacklist(@RequestParam("email") String email, Model model) throws URISyntaxException {
+        blackListService.removeEmailFromBlackList(email);
+        model.addAttribute("message", "Email removed from blacklist successfully.");
+        return "blacklist.html";
+    }
+
+ */
 }
