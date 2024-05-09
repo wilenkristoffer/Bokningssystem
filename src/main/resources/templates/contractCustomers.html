@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Företagskunder</title>
+    <link href="css/styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container px-5">
+        <a class="navbar-brand" href="/">Hem</a>
+    </div>
+</nav>
+<main class="container mt-5">
+    <section class="existing-bookings mb-5">
+        <h2 class="mb-3">Lista av företagskunder</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Företagsnamn</th>
+                <th>Kontaktnamn</th>
+                <th>Land</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="customers : ${contractCustomers}" th:data-id="${contractCustomer.id}">
+                <td th:text="${customers.companyName}"></td>
+                <td th:text="${customers.contactName}"></td>
+                <td th:text="${customers.country}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="${#lists.isEmpty(customers)}">
+            <p th:text="${emptyListMessage}"></p>
+        </div>
+    </section>
+</main>
+
+</body>
+</html>
