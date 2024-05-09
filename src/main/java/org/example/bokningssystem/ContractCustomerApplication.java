@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.net.URL;
 
-@Component
+@ComponentScan
 public class ContractCustomerApplication implements CommandLineRunner {
 
     ContractCustomerRepo customerRepo;

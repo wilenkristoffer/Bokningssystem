@@ -12,8 +12,12 @@ public class BokningssystemApplication {
     public static void main(String[] args) {
         if (args.length == 0) {
             SpringApplication.run(BokningssystemApplication.class, args);
-        } else if (Objects.equals(args[0], "fetchShippers")) {
+        } else if (Objects.equals(args[0], "FetchShippers")) {
             SpringApplication application = new SpringApplication(FetchShippers.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
+        } else if (Objects.equals(args[0], "ContractCustomerApplication")) {
+            SpringApplication application = new SpringApplication(ContractCustomerApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
         }
