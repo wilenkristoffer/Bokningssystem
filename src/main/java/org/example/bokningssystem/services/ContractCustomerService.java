@@ -19,5 +19,6 @@ public interface ContractCustomerService {
 
     public List<DetailedContractCustomerDto> getAllCustomers();
 
-    DetailedContractCustomerDto getCustomerById(Long customerId);
+    public DetailedContractCustomerDto getCustomerById(Long customerId);
+    public List<ContractCustomerDto> getCustomers(String sortBy, String search);
 }

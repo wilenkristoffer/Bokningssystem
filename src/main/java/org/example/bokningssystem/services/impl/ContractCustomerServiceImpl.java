@@ -8,17 +8,16 @@ import org.example.bokningssystem.repo.ContractCustomerRepo;
 import org.example.bokningssystem.services.ContractCustomerService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     private final ContractCustomerRepo contractCustomerRepo;
-
-
-
 
     @Override
     public ContractCustomerDto contractCustomerToContractCustomerDto(ContractCustomer c) {
@@ -50,6 +49,7 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
         return contractCustomerRepo.findAll().stream().map(this::contractCustomerToDetailedContractCustomerDto).toList();
     }
 
+
     @Override
     public DetailedContractCustomerDto getCustomerById(Long customerId) {
         Optional<ContractCustomer> customerOptional = contractCustomerRepo.findById(customerId);
@@ -60,4 +60,53 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
 
 
     }
+
+    @Override
+    public List<ContractCustomerDto> getCustomers(String sortBy, String search) {
+        List<ContractCustomer> customers;
+
+        customers = contractCustomerRepo.findAll();
+
+        if (sortBy != null) {
+            boolean descending = sortBy.startsWith("-");
+            String sortField = descending ? sortBy.substring(1) : sortBy;
+
+            Comparator<ContractCustomer> comparator = null;
+            switch (sortField) {
+                case "companyName":
+                    comparator = Comparator.comparing(ContractCustomer::getCompanyName);
+                    break;
+                case "contactName":
+                    comparator = Comparator.comparing(ContractCustomer::getContactName);
+                    break;
+                case "country":
+                    comparator = Comparator.comparing(ContractCustomer::getCountry);
+                    break;
+                default:
+                    break;
+            }
+
+            if (comparator != null) {
+                if (descending) {
+                    comparator = comparator.reversed();
+                }
+                customers.sort(comparator);
+            }
+        }
+
+        if (search != null) {
+            String searchLowerCase = search.toLowerCase();
+            customers = customers.stream()
+                    .filter(customer ->
+                            customer.getCompanyName().toLowerCase().contains(searchLowerCase) ||
+                                    customer.getContactName().toLowerCase().contains(searchLowerCase) ||
+                                    customer.getCountry().toLowerCase().contains(searchLowerCase))
+                    .collect(Collectors.toList());
+        }
+
+   return customers.stream()
+                .map(this::contractCustomerToContractCustomerDto)
+                .collect(Collectors.toList());
+    }
+
 }

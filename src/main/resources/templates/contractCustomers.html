@@ -18,6 +18,15 @@
 <main class="container mt-5">
     <section class="existing-bookings mb-5">
         <h2 class="mb-3">Lista av företagskunder</h2>
+        <div class="mb-3">
+            <input type="text" id="searchInput" placeholder="Sök..." />
+            <button class="btn btn-primary" onclick="searchCustomers()">Sök</button>
+
+            <button class="btn btn-primary" onclick="sortCustomers('companyName')" data-sort="companyName">Sortera efter företagsnamn</button>
+            <button class="btn btn-primary" onclick="sortCustomers('contactName')" data-sort="contactName">Sortera efter kontaktnamn</button>
+            <button class="btn btn-primary" onclick="sortCustomers('country')" data-sort="country">Sortera efter land</button>
+
+        </div>
         <table class="table" id="customerTable">
             <thead>
             <tr>
@@ -40,15 +49,67 @@
 </main>
 
 <script>
-    document.getElementById('customerTable').addEventListener('click', function(event) {
+    document.getElementById('customerTable').addEventListener('click', function (event) {
         const target = event.target.closest('.customer-link');
         if (target) {
             const customerId = target.getAttribute('data-customer-id');
-
             window.location.href = '/allDetails?customerId=' + customerId;
         }
     });
-</script>
 
+
+    function updateCustomerList(sortBy, search) {
+        fetch(`/customers?sortBy=${sortBy}&search=${search}`)
+            .then(response => response.json())
+            .then(customers => {
+                const tbody = document.querySelector('#customerTable tbody');
+                tbody.innerHTML = ''; // Clear existing table rows
+                customers.forEach(customer => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><a class="customer-link" href="#" data-customer-id="${customer.id}">${customer.companyName}</a></td>
+                        <td>${customer.contactName}</td>
+                        <td>${customer.country}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching customer data:', error);
+            });
+    }
+
+    let sortOrder = null;
+
+    function sortCustomers(sortBy) {
+        const searchInput = document.getElementById('searchInput');
+        const search = searchInput.value.trim();
+
+        if (sortOrder === sortBy) {
+            sortOrder = `-${sortBy}`;
+        } else if (sortOrder === `-${sortBy}`) {
+            sortOrder = null;
+        } else {
+            sortOrder = sortBy;
+        }
+        updateCustomerList(sortOrder, search);
+    }
+
+
+    function searchCustomers() {
+
+        const searchInput = document.getElementById('searchInput');
+        const searchValue = searchInput.value.trim();
+
+        updateCustomerList(null, searchValue);
+    }
+
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+        const sortBy = document.querySelector('th.sorted').dataset.sortBy;
+        const search = this.value.trim();
+        updateCustomerList(sortBy, search);
+    });
+</script>
 </body>
 </html>
