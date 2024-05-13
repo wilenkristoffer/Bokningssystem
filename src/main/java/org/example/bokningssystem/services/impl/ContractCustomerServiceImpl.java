@@ -6,6 +6,11 @@ import org.example.bokningssystem.dtos.DetailedContractCustomerDto;
 import org.example.bokningssystem.modell.ContractCustomer;
 import org.example.bokningssystem.repo.ContractCustomerRepo;
 import org.example.bokningssystem.services.ContractCustomerService;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -28,13 +33,6 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
 
     }
 
-
-    @Override
-    public List<ContractCustomerDto> getAllCustomersSimple() {
-        return contractCustomerRepo.findAll().stream()
-                .map(this::contractCustomerToContractCustomerDto).toList();
-    }
-
     @Override
     public DetailedContractCustomerDto contractCustomerToDetailedContractCustomerDto(ContractCustomer c) {
         return DetailedContractCustomerDto.builder().id(c.getId()).companyName(c.getCompanyName())
@@ -45,68 +43,42 @@ public class ContractCustomerServiceImpl implements ContractCustomerService {
     }
 
     @Override
-    public List<DetailedContractCustomerDto> getAllCustomers() {
-        return contractCustomerRepo.findAll().stream().map(this::contractCustomerToDetailedContractCustomerDto).toList();
+    public Page<ContractCustomerDto> getAllCustomersSimple(Pageable pageable) {
+        Page<ContractCustomer> customers = contractCustomerRepo.findAll(pageable);
+        return customers.map(this::contractCustomerToContractCustomerDto);
     }
-
 
     @Override
     public DetailedContractCustomerDto getCustomerById(Long customerId) {
         Optional<ContractCustomer> customerOptional = contractCustomerRepo.findById(customerId);
-
-            ContractCustomer customer = customerOptional.get();
-
-            return contractCustomerToDetailedContractCustomerDto(customer);
-
-
+        ContractCustomer customer = customerOptional.get();
+        return contractCustomerToDetailedContractCustomerDto(customer);
     }
 
     @Override
-    public List<ContractCustomerDto> getCustomers(String sortBy, String search) {
-        List<ContractCustomer> customers;
+    public Page<ContractCustomerDto> getCustomers(String search, Pageable pageable) {
+        if (search == null) {
+            return getAllCustomersSimple(pageable);
+        } else {
 
-        customers = contractCustomerRepo.findAll();
-
-        if (sortBy != null) {
-            boolean descending = sortBy.startsWith("-");
-            String sortField = descending ? sortBy.substring(1) : sortBy;
-
-            Comparator<ContractCustomer> comparator = null;
-            switch (sortField) {
-                case "companyName":
-                    comparator = Comparator.comparing(ContractCustomer::getCompanyName);
-                    break;
-                case "contactName":
-                    comparator = Comparator.comparing(ContractCustomer::getContactName);
-                    break;
-                case "country":
-                    comparator = Comparator.comparing(ContractCustomer::getCountry);
-                    break;
-                default:
-                    break;
-            }
-
-            if (comparator != null) {
-                if (descending) {
-                    comparator = comparator.reversed();
-                }
-                customers.sort(comparator);
-            }
+            return contractCustomerRepo.findByCompanyNameContainingIgnoreCaseOrContactNameContainingIgnoreCaseOrCountryContainingIgnoreCase(
+                            search, search, search, pageable)
+                    .map(this::contractCustomerToContractCustomerDto);
         }
 
-        if (search != null) {
-            String searchLowerCase = search.toLowerCase();
-            customers = customers.stream()
-                    .filter(customer ->
-                            customer.getCompanyName().toLowerCase().contains(searchLowerCase) ||
-                                    customer.getContactName().toLowerCase().contains(searchLowerCase) ||
-                                    customer.getCountry().toLowerCase().contains(searchLowerCase))
-                    .collect(Collectors.toList());
-        }
+}
+    @Override
+    public Page<ContractCustomerDto> getContractCustomers(int page, int size, String sortBy, String direction, String search) {
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-   return customers.stream()
-                .map(this::contractCustomerToContractCustomerDto)
-                .collect(Collectors.toList());
+        if (search != null && !search.isEmpty()) {
+            return contractCustomerRepo.findByCompanyNameContainingIgnoreCaseOrContactNameContainingIgnoreCaseOrCountryContainingIgnoreCase(
+                            search, search, search, pageable)
+                    .map(this::contractCustomerToContractCustomerDto);
+        } else {
+            return contractCustomerRepo.findAll(pageable)
+                    .map(this::contractCustomerToContractCustomerDto);
+        }
     }
-
 }

@@ -5,6 +5,10 @@ import org.example.bokningssystem.dtos.ContractCustomerDto;
 import org.example.bokningssystem.dtos.DetailedContractCustomerDto;
 
 import org.example.bokningssystem.services.ContractCustomerService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.stereotype.Controller;
@@ -16,22 +20,31 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-@Controller
-@RequiredArgsConstructor
-public class ContractCustomerController {
+    @Controller
+    @RequiredArgsConstructor
+    public class ContractCustomerController {
 
-    private final ContractCustomerService contractCustomerService;
+        private final ContractCustomerService contractCustomerService;
 
-    @RequestMapping("contractCustomers")
-        public String contractCustomers(Model model){
+        @GetMapping("/contractCustomers")
+        public String contractCustomers(Model model,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "10") int size,
+                                        @RequestParam(defaultValue = "companyName") String sortBy,
+                                        @RequestParam(defaultValue = "asc") String direction,
+                                        @RequestParam(required = false) String search) {
 
-        List<ContractCustomerDto> contractCustomers = contractCustomerService.getAllCustomersSimple();
+            Page<ContractCustomerDto> contractCustomersPage = contractCustomerService.getContractCustomers(page, size, sortBy, direction, search);
 
-        model.addAttribute("contractCustomers", contractCustomers);
-        model.addAttribute("emptyListMessage", "Inga företagskunder hittades");
+            model.addAttribute("contractCustomers", contractCustomersPage.getContent());
+            model.addAttribute("currentPage", contractCustomersPage.getNumber());
+            model.addAttribute("totalPages", contractCustomersPage.getTotalPages());
+            model.addAttribute("emptyListMessage", "Inga företagskunder hittades");
             return "contractCustomers";
         }
-    @GetMapping("/allDetails")
+
+
+        @GetMapping("/allDetails")
     public String getCustomerDetails(Long customerId, RedirectAttributes redirectAttributes) {
 
         DetailedContractCustomerDto customer = contractCustomerService.getCustomerById(customerId);
@@ -45,13 +58,18 @@ public class ContractCustomerController {
         return "customerDetails";
 
     }
-    @GetMapping("/customers")
-    public ResponseEntity<List<ContractCustomerDto>> getCustomers(
-            @RequestParam(required = false) String sortBy,
-            @RequestParam(required = false) String search
-    ) {
-        List<ContractCustomerDto> customers = contractCustomerService.getCustomers(sortBy, search);
-        return ResponseEntity.ok(customers);
-    }
+        @GetMapping("/customers")
+        public ResponseEntity<Page<ContractCustomerDto>> getCustomers(
+                @RequestParam(required = false) String search,
+                @RequestParam(defaultValue = "0") int page,
+                @RequestParam(defaultValue = "10") int size,
+                @RequestParam(defaultValue = "companyName") String sortBy,
+                @RequestParam(defaultValue = "asc") String direction) {
+
+            Sort.Direction sortDirection = Sort.Direction.fromString(direction);
+            Pageable pageable = PageRequest.of(page, size, sortDirection, sortBy);
+            Page<ContractCustomerDto> customers = contractCustomerService.getCustomers(search, pageable);
+            return ResponseEntity.ok(customers);
+        }
 }
 
