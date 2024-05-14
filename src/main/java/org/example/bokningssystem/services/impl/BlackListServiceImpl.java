@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -98,36 +99,35 @@ public class BlackListServiceImpl {
         }
     }
 
-    public void removeEmailFromBlackList(String email, boolean newStatus) throws URISyntaxException {
+    public void removeEmailFromBlackList(String email, boolean newStatus) {
         try {
-            BlackList currentEntry = getBlackListByEmail(email);
-            if (currentEntry == null) {
-                System.err.println("Email not found in the blacklist.");
-                return;
-            }
+            String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8.toString());
 
-            // Update the 'ok' status
-            currentEntry.setOk(newStatus);
+            String url = "https://javabl.systementor.se/api/skt/blacklist/" + encodedEmail;
 
-            String jsonPayload = objectMapper.writeValueAsString(currentEntry);
+            BlackList updatedEntry = new BlackList();
+            updatedEntry.setEmail(email);
+            updatedEntry.setOk(newStatus);
+
+            String jsonPayload = objectMapper.writeValueAsString(updatedEntry);
+
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("https://javabl.systementor.se/api/skt/blacklist"))
+                    .uri(new URI(url))
                     .header("Content-Type", "application/json")
-                    .PUT(HttpRequest.BodyPublishers.ofString(jsonPayload, StandardCharsets.UTF_8))
+                    .PUT(HttpRequest.BodyPublishers.ofString(jsonPayload))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-
             if (response.statusCode() == 200) {
-                System.out.println("Email removed from remote blacklist successfully.");
+                System.out.println("Email status updated successfully.");
             } else {
-                System.err.println("Failed to remove email from remote blacklist: " + response.body());
+                System.err.println("Failed to update email status: " + response.body());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Error occurred while removing email from blacklist.");
+            System.err.println("Error occurred while updating email status.");
         }
     }
 
