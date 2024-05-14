@@ -36,17 +36,4 @@ public class BlacklistController {
         model.addAttribute("message", "Email removed from blacklist successfully.");
         return "blacklist.html";
     }
-
-
-/*
-
-    ////For delete() in BlackListServiceImpl
-    @PostMapping("/removeEmail")
-    public String removeEmailFromBlacklist(@RequestParam("email") String email, Model model) throws URISyntaxException {
-        blackListService.removeEmailFromBlackList(email);
-        model.addAttribute("message", "Email removed from blacklist successfully.");
-        return "blacklist.html";
-    }
-
- */
 }
