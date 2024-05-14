@@ -1,6 +1,5 @@
 package org.example.bokningssystem.services.impl;
 
-import aj.org.objectweb.asm.TypeReference;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +13,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 @Service
@@ -103,28 +100,6 @@ public class BlackListServiceImpl {
         }
     }
 
-
-
-    private BlackList getBlackListByEmail(String email) throws URISyntaxException {
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("https://javabl.systementor.se/api/skt/blacklist"))
-                    .GET()
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            BlackList[] blacklistEntries = objectMapper.readValue(response.body(), BlackList[].class);
-            return Arrays.stream(blacklistEntries)
-                    .filter(entry -> entry.getEmail().equalsIgnoreCase(email))
-                    .findFirst()
-                    .orElse(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public void removeEmailFromBlackList(String email, boolean newStatus) {
         try {
             String encodedEmail = URLEncoder.encode(email, StandardCharsets.UTF_8.toString());
@@ -156,33 +131,4 @@ public class BlackListServiceImpl {
             System.err.println("Error occurred while updating email status.");
         }
     }
-
-
-
-/*
-
-    ///Gets error status 405 which means that api doesnt support delete().
-    public void removeEmailFromBlackList(String email){
-        try {
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("https://javabl.systementor.se/api/skt/blacklist"))
-                    .DELETE()
-                    .build();
-
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            if (response.statusCode() == 200) {
-                System.out.println("Email removed from remote blacklist successfully.");
-            } else {
-                System.err.println("Failed to remove email from remote blacklist: " + response.body());
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
- */
-
 }
