@@ -46,30 +46,56 @@ public class BlackListServiceImpl {
 
     public void addEmailToBlackList(String email) throws URISyntaxException {
         try {
-            BlackList newEntry = new BlackList(
-                    0,
-                    email,
-                    null,
-                    null,
-                    null,
-                    false
-            );
+            // Check if the email exists in the blacklist
+            BlackList existingEntry = getBlackListByEmail(email);
 
-            String jsonPayload = objectMapper.writeValueAsString(newEntry);
+            if (existingEntry != null) {
+                // If the email exists, update its 'ok' status to false
+                existingEntry.setOk(false);
 
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("https://javabl.systementor.se/api/skt/blacklist"))
-                    .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonPayload, StandardCharsets.UTF_8))
-                    .build();
+                String jsonPayload = objectMapper.writeValueAsString(existingEntry);
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(new URI("https://javabl.systementor.se/api/skt/blacklist/" + email))
+                        .header("Content-Type", "application/json")
+                        .PUT(HttpRequest.BodyPublishers.ofString(jsonPayload, StandardCharsets.UTF_8))
+                        .build();
+
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
 
-            if (response.statusCode() == 200) {
-                System.out.println("Email added to remote blacklist successfully.");
+                if (response.statusCode() == 200) {
+                    System.out.println("Email status updated successfully.");
+                } else {
+                    System.err.println("Failed to update email status: " + response.body());
+                }
             } else {
-                System.err.println("Failed to add email to remote blacklist: " + response.body());
+                // If the email doesn't exist, add it to the blacklist with 'ok' status set to false
+                BlackList newEntry = new BlackList(
+                        0,
+                        email,
+                        null,
+                        null,
+                        null,
+                        false
+                );
+
+                String jsonPayload = objectMapper.writeValueAsString(newEntry);
+
+                HttpRequest request = HttpRequest.newBuilder()
+                        .uri(new URI("https://javabl.systementor.se/api/skt/blacklist"))
+                        .header("Content-Type", "application/json")
+                        .POST(HttpRequest.BodyPublishers.ofString(jsonPayload, StandardCharsets.UTF_8))
+                        .build();
+
+                HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+
+                if (response.statusCode() == 200) {
+                    System.out.println("Email added to remote blacklist successfully.");
+                } else {
+                    System.err.println("Failed to add email to remote blacklist: " + response.body());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
