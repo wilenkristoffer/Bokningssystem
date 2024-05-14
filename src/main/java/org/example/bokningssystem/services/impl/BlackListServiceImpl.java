@@ -43,11 +43,11 @@ public class BlackListServiceImpl {
 
     public void addEmailToBlackList(String email) throws URISyntaxException {
         try {
-            // Check if the email exists in the blacklist
+
             BlackList existingEntry = getBlackListByEmail(email);
 
             if (existingEntry != null) {
-                // If the email exists, update its 'ok' status to false
+
                 existingEntry.setOk(false);
 
                 String jsonPayload = objectMapper.writeValueAsString(existingEntry);
@@ -67,7 +67,6 @@ public class BlackListServiceImpl {
                     System.err.println("Failed to update email status: " + response.body());
                 }
             } else {
-                // If the email doesn't exist, add it to the blacklist with 'ok' status set to false
                 BlackList newEntry = new BlackList(
                         0,
                         email,
@@ -97,6 +96,28 @@ public class BlackListServiceImpl {
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Error occurred while adding email to blacklist.");
+        }
+    }
+
+
+
+    private BlackList getBlackListByEmail(String email) throws URISyntaxException {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(new URI("https://javabl.systementor.se/api/skt/blacklist"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            BlackList[] blacklistEntries = objectMapper.readValue(response.body(), BlackList[].class);
+            return Arrays.stream(blacklistEntries)
+                    .filter(entry -> entry.getEmail().equalsIgnoreCase(email))
+                    .findFirst()
+                    .orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
