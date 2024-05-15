@@ -17,4 +17,5 @@ public interface RumService {
     public List<RumDto> getAllRumSimple();
     public String addBeds(DetailedRumDto rum);
     public List<RumDto> getAvailableRum(SearchBokningDto b);
+    public DetailedRumDto getRumById(Long rumId);
 }

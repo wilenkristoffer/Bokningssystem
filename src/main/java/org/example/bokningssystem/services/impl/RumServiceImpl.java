@@ -3,6 +3,7 @@ package org.example.bokningssystem.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.bokningssystem.dtos.*;
+import org.example.bokningssystem.modell.ContractCustomer;
 import org.example.bokningssystem.modell.Kund;
 import org.example.bokningssystem.modell.Rum;
 import org.example.bokningssystem.repo.RumRepo;
@@ -102,6 +103,12 @@ public class RumServiceImpl implements RumService {
                     return booking.getRoom().getId().equals(rum.getId()) &&
                             !bookingEndDate.isBefore(startDate) && !endDate.isBefore(bookingStartDate);
                 });
+    }
+    @Override
+    public DetailedRumDto getRumById(Long rumId) {
+        Rum rum = rumRepo.findById(rumId).orElse(null);
+
+        return rumToDetailedRumDto(rum);
     }
 
 

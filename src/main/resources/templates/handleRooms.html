@@ -35,7 +35,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="rum : ${rummen}" th:data-room-id="${rum.id}">
-                        <td th:text="${rum.name}"></td>
+                        <td><a class="rum-link" th:href="@{/roomDetails(roomId=${rum.id})}" th:text="${rum.name}"></a></td>
                         <td th:text="${rum.rumstyp}"></td>
                         <td th:text="${rum.antalSangar}"></td>
                         <td><button class="btn btn-dark edit-btn" data-id="${rum.id}">Hantera</button></td>
