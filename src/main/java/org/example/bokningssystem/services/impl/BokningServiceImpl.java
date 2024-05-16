@@ -15,6 +15,7 @@ import org.example.bokningssystem.repo.RumRepo;
 import org.example.bokningssystem.services.BokningService;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -157,6 +158,15 @@ public class BokningServiceImpl implements BokningService {
 
         if (nights >= 2) {
             totalPrice *= 0.995;
+        }
+
+        LocalDate date = startDate;
+        while (!date.isAfter(endDate)) {
+            if (date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+                totalPrice *= 0.98;
+                break;
+            }
+            date = date.plusDays(1);
         }
 
         return totalPrice;
