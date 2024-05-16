@@ -18,10 +18,7 @@ public class DetailedBokningDto {
     private LocalDate startDate;
     private LocalDate endDate;
     private long nights;
+    private int totalPrice;
     private KundDto kund;
     private RumDto room;
-
-    public DetailedBokningDto(KundDto kund) {
-        this.kund = kund;
-    }
 }
