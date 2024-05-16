@@ -159,14 +159,12 @@ public class BokningServiceImpl implements BokningService {
         if (nights >= 2) {
             totalPrice *= 0.995;
         }
-
-        LocalDate date = startDate;
-        while (!date.isAfter(endDate)) {
-            if (date.getDayOfWeek() == DayOfWeek.SUNDAY) {
+        while (!startDate.isAfter(endDate)) {
+            if (startDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
                 totalPrice *= 0.98;
                 break;
             }
-            date = date.plusDays(1);
+            startDate = startDate.plusDays(1);
         }
 
         return totalPrice;
