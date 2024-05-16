@@ -73,7 +73,7 @@ public class BokningServiceImpl implements BokningService {
 
     @Override
     public Bokning detailedBokningDtoToBokning(DetailedBokningDto b, Kund kund, Rum rum){
-        int totalPrice = calculateTotalPrice(b.getStartDate(), b.getEndDate(), rum.getPrice());
+        double totalPrice = calculateTotalPrice(b.getStartDate(), b.getEndDate(), rum.getPrice());
         return Bokning.builder()
                 .id(b.getId())
                 .startDate(b.getStartDate())
@@ -151,8 +151,14 @@ public class BokningServiceImpl implements BokningService {
         return ChronoUnit.DAYS.between(startDate, endDate);
     }
 
-    public int calculateTotalPrice(LocalDate startDate, LocalDate endDate, int pricePerNight) {
+    public double calculateTotalPrice(LocalDate startDate, LocalDate endDate, int pricePerNight) {
         long nights = calculateNights(startDate, endDate);
-        return (int) (nights * pricePerNight);
+        double totalPrice = nights * pricePerNight;
+
+        if (nights >= 2) {
+            totalPrice *= 0.995;
+        }
+
+        return totalPrice;
     }
 }

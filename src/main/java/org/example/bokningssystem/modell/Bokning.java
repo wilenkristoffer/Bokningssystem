@@ -23,7 +23,7 @@ public class Bokning {
     private LocalDate endDate;
 
     private long nights;
-    private int totalPrice;
+    private double totalPrice;
 
     @ManyToOne
     @JoinColumn
