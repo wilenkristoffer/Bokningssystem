@@ -22,6 +22,8 @@ public class Bokning {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private long nights;
+
     @ManyToOne
     @JoinColumn
     private Rum room;

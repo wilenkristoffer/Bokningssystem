@@ -15,6 +15,8 @@ import org.example.bokningssystem.repo.RumRepo;
 import org.example.bokningssystem.services.BokningService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,8 @@ public class BokningServiceImpl implements BokningService {
 
     @Override
     public Bokning detailedBokningToDetailedBokningDto(DetailedBokningDto b) {
-        return Bokning.builder().id(b.getId()).endDate(b.getEndDate()).startDate(b.getStartDate()).kund(Kund.builder()
+        return Bokning.builder().id(b.getId()).endDate(b.getEndDate()).startDate(b.getStartDate()).nights(b.getNights())
+                .kund(Kund.builder()
                         .id(b.getKund().getId())
                         .namn(b.getKund().getNamn())
                         .build())
@@ -55,6 +58,7 @@ public class BokningServiceImpl implements BokningService {
                 .room(new RumDto(b.getRoom().getId(), b.getRoom().getName()))
                 .startDate(b.getStartDate())
                 .endDate(b.getEndDate())
+                .nights(calculateNights(b.getStartDate(), b.getEndDate()))
                 .build();
     }
 
@@ -70,6 +74,7 @@ public class BokningServiceImpl implements BokningService {
                 .id(b.getId())
                 .startDate(b.getStartDate())
                 .endDate(b.getEndDate())
+                .nights(b.getNights())
                 .room(rum)
                 .kund(kund)
                 .build();
@@ -80,7 +85,10 @@ public class BokningServiceImpl implements BokningService {
         Kund kund = kundRepo.findById(bokning.getKund().getId()).get();
         Rum rum = rumRepo.findById(bokning.getRoom().getId()).get();
 
-        bokningRepo.save(detailedBokningDtoToBokning(bokning, kund, rum));
+        Bokning newBokning = detailedBokningDtoToBokning(bokning, kund, rum);
+        newBokning.setNights(calculateNights(bokning.getStartDate(), bokning.getEndDate()));
+
+        bokningRepo.save(newBokning);
         return "Bokning tillagd";
     }
 
@@ -116,8 +124,10 @@ public class BokningServiceImpl implements BokningService {
 
         existingBokning.setStartDate(updatedBokning.getStartDate());
         existingBokning.setEndDate(updatedBokning.getEndDate());
+        existingBokning.setNights(updatedBokning.getNights());
         existingBokning.setKund(kund);
         existingBokning.setRoom(rum);
+        existingBokning.setNights(calculateNights(updatedBokning.getStartDate(), updatedBokning.getEndDate()));
 
         bokningRepo.save(existingBokning);
 
@@ -128,6 +138,10 @@ public class BokningServiceImpl implements BokningService {
     public String deleteBooking(Long bokningId) {
         bokningRepo.deleteById(bokningId);
         return "kunden har tagit borts";
+    }
+
+    private long calculateNights(LocalDate startDate, LocalDate endDate) {
+        return ChronoUnit.DAYS.between(startDate, endDate);
     }
 
 }

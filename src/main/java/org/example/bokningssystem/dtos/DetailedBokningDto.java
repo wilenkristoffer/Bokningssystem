@@ -17,6 +17,7 @@ public class DetailedBokningDto {
     private Long id;
     private LocalDate startDate;
     private LocalDate endDate;
+    private long nights;
     private KundDto kund;
     private RumDto room;
 
