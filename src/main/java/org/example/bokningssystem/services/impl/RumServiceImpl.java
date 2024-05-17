@@ -105,10 +105,9 @@ public class RumServiceImpl implements RumService {
                 });
     }
     @Override
-    public DetailedRumDto getRumById(Long rumId) {
-        Rum rum = rumRepo.findById(rumId).orElse(null);
+    public Rum getRumById(Long rumId) {
 
-        return rumToDetailedRumDto(rum);
+        return rumRepo.findById(rumId).get();
     }
 
 

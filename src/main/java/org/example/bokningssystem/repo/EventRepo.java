@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface EventRepo extends JpaRepository<Event, Long> {
-    List<DetailedEventDto> findByRum(DetailedRumDto rum);
+    List<Event> findByRum(Rum rum);
 }

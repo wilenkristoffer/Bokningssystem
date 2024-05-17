@@ -1,16 +1,22 @@
 package org.example.bokningssystem.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.example.bokningssystem.modell.Event;
+import org.example.bokningssystem.repo.EventRepo;
 import org.example.bokningssystem.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 public class EventController {
 
     private final EventService eventService;
@@ -32,10 +38,15 @@ public class EventController {
         return event.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/createEvent/{rumId}")
-    public ResponseEntity<Event> createEvent(@PathVariable Long rumId, @RequestBody Event event) {
-        Event createdEvent = eventService.createEvent(rumId, event);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
+    @PostMapping("/createEvent")
+    public String createEvent(@RequestParam Long rumId, @ModelAttribute Event event, RedirectAttributes redirectAttributes) {
+        LocalDateTime now = LocalDateTime.now();
+        event.setTimestamp(now);
+        eventService.createEvent(rumId, event);
+
+        redirectAttributes.addFlashAttribute("addSuccess", "Händelsen är tillagd till rummet.");
+
+        return "redirect:/roomDetails?roomId=" + rumId;
     }
 
     @PutMapping("/updateEvent{id}")

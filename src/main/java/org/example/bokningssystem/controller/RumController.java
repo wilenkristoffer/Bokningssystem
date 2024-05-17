@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.bokningssystem.dtos.DetailedEventDto;
 import org.example.bokningssystem.dtos.DetailedKundDto;
 import org.example.bokningssystem.dtos.DetailedRumDto;
+import org.example.bokningssystem.modell.Event;
 import org.example.bokningssystem.modell.Rum;
 import org.example.bokningssystem.repo.RumRepo;
 import org.example.bokningssystem.services.EventService;
@@ -16,8 +17,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,13 +63,19 @@ public class RumController {
 
     @GetMapping("/roomDetails")
     public String handleRoomDetails(Long roomId, Model model) {
-        DetailedRumDto rum = rumService.getRumById(roomId);
-        List<DetailedEventDto> event = eventService.getAllEventsForRum(rum);
+        Rum rum = rumService.getRumById(roomId);
+        List<Event> events = eventService.getAllEventsForRum(rum);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd HH:mm:ss");
+        List<String> formattedTimestamps = events.stream()
+                .map(event -> event.getTimestamp().format(formatter))
+                .collect(Collectors.toList());
 
         model.addAttribute("rum", rum);
-        model.addAttribute("event", event);
+        model.addAttribute("events", events);
+        model.addAttribute("formattedTimestamps", formattedTimestamps);
 
-        return "roomDetails.html";
+        return "roomDetails";
     }
 
 

@@ -16,5 +16,5 @@ public interface EventService {
     Event updateEvent(Long id, Event event);
     void deleteEvent(Long id);
 
-    List<DetailedEventDto> getAllEventsForRum(DetailedRumDto rum);
+    List<Event> getAllEventsForRum(Rum rum);
 }

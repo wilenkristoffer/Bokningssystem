@@ -61,7 +61,7 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public List<DetailedEventDto> getAllEventsForRum(DetailedRumDto rum) {
+    public List<Event> getAllEventsForRum(Rum rum) {
         return eventRepo.findByRum(rum);
     }
 

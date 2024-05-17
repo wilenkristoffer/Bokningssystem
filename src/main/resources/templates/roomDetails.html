@@ -16,27 +16,55 @@
         <a class="navbar-brand" href="/">Hem</a>
     </div>
 </nav>
-<div class="col-lg-8 mx-auto">
-    <div class="rooms">
-        <h2 th:text="'Händelser för rum' + ' - ' + ${rum.id} + ' (' + ${rum.name} + ')'" class="mb-3"></h2>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Händelser</th>
 
+<div th:if="${addSuccess}" class="alert alert-success text-center" role="alert">
+    <span th:text="${addSuccess}"></span>
+</div><div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="rooms" th:data-room-id="${rum.id}">
+                <h2 th:text="'Händelser för rum ' + ${rum.id} + ' - (' + ${rum.name} + ')'" class="mb-3"></h2>
+                <table class="table table-striped">
+                    <thead>
+            <tr>
+                <th scope="col">Dörrstatus</th>
+                <th scope="col">Städning</th>
+                <th scope="col">Tidsstämpel</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-               <!-- Händelser här -->
+            <tr th:each="event, i : ${events}">
+                <td th:text="${event.isDoorOpen ? 'Dörren öppen' : 'Dörren stängd'}"></td>
+                <td th:text="${event.isRoomCleaned ? 'Rummet städat' : 'Rummet ej städat'}"></td>
+                <td th:text="${formattedTimestamps[i.index]}"></td>
             </tr>
             </tbody>
         </table>
+                <hr>
+        <form id="createEventForm" action="/createEvent" method="post">
+            <input type="hidden" id="rumId" name="rumId" th:value="${rum.id}">
+            <label for="doorOpen">Dörren öppen:</label>
+            <select id="doorOpen" name="doorOpen" required>
+                <option value="true">Ja</option>
+                <option value="false">Nej</option>
+            </select>
+
+            <label for="roomCleaned">Rummet städat:</label>
+            <select id="roomCleaned" name="roomCleaned" required>
+                <option value="true">Ja</option>
+                <option value="false">Nej</option>
+            </select>
+
+            <button type="submit">Lägg till händelse</button>
+        </form>
+    </div>
+        </div>
     </div>
 </div>
-    </div>
-</div>
+
 <script>
+
 </script>
+
 </body>
 </html>
