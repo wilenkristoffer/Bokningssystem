@@ -156,17 +156,16 @@ public class BokningServiceImpl implements BokningService {
         long nights = calculateNights(startDate, endDate);
         double totalPrice = nights * pricePerNight;
 
-        if (nights >= 2) {
-            totalPrice *= 0.995;
-        }
         while (!startDate.isAfter(endDate)) {
             if (startDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
-                totalPrice *= 0.98;
-                break;
+                totalPrice -= pricePerNight * 0.02;
             }
             startDate = startDate.plusDays(1);
         }
 
+        if (nights >= 2) {
+            totalPrice *= 0.995;
+        }
         return totalPrice;
     }
 }
