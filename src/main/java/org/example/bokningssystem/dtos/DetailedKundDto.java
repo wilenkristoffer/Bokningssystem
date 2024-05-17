@@ -40,6 +40,8 @@ public class DetailedKundDto {
     @Size(min = 10, max = 12, message = "Minst 10 och max 12 siffror")
     private String personummer;
 
+    private int nightsLastYear;
+
     private List<BokningDto> bokning;
 
 

@@ -24,5 +24,5 @@ public interface BokningService {
     public String modifyBookning(DetailedBokningDto updatedBokning);
     public String deleteBooking(Long bokningId);
     public long calculateNights(LocalDate startDate, LocalDate endDate);
-    public double calculateTotalPrice(LocalDate startDate, LocalDate endDate, int pricePerNight);
+    public double calculateTotalPrice(LocalDate startDate, LocalDate endDate, int pricePerNight, int nightsLastYear);
 }

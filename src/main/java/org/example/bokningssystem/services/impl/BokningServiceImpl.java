@@ -13,7 +13,9 @@ import org.example.bokningssystem.repo.BokningRepo;
 import org.example.bokningssystem.repo.KundRepo;
 import org.example.bokningssystem.repo.RumRepo;
 import org.example.bokningssystem.services.BokningService;
+import org.example.bokningssystem.services.KundService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -57,7 +59,7 @@ public class BokningServiceImpl implements BokningService {
     @Override
     public DetailedBokningDto bokningToDetailedBokningDto(Bokning b) {
         return DetailedBokningDto.builder().id(b.getId())
-                .kund(new KundDto(b.getKund().getId(), b.getKund().getNamn(), b.getKund().getEmail()))
+                .kund(new KundDto(b.getKund().getId(), b.getKund().getNamn(), b.getKund().getEmail(), b.getKund().getNightsLastYear()))
                 .room(new RumDto(b.getRoom().getId(), b.getRoom().getName()))
                 .startDate(b.getStartDate())
                 .endDate(b.getEndDate())
@@ -74,7 +76,7 @@ public class BokningServiceImpl implements BokningService {
 
     @Override
     public Bokning detailedBokningDtoToBokning(DetailedBokningDto b, Kund kund, Rum rum){
-        double totalPrice = calculateTotalPrice(b.getStartDate(), b.getEndDate(), rum.getPrice());
+        double totalPrice = calculateTotalPrice(b.getStartDate(), b.getEndDate(), rum.getPrice(), kund.getNightsLastYear());
         return Bokning.builder()
                 .id(b.getId())
                 .startDate(b.getStartDate())
@@ -93,7 +95,7 @@ public class BokningServiceImpl implements BokningService {
 
         Bokning newBokning = detailedBokningDtoToBokning(bokning, kund, rum);
         newBokning.setNights(calculateNights(bokning.getStartDate(), bokning.getEndDate()));
-        newBokning.setTotalPrice(calculateTotalPrice(bokning.getStartDate(), bokning.getEndDate(), rum.getPrice()));
+        newBokning.setTotalPrice(calculateTotalPrice(bokning.getStartDate(), bokning.getEndDate(), rum.getPrice(), kund.getNightsLastYear()));
 
         bokningRepo.save(newBokning);
         return "Bokning tillagd";
@@ -135,7 +137,7 @@ public class BokningServiceImpl implements BokningService {
         existingBokning.setKund(kund);
         existingBokning.setRoom(rum);
         existingBokning.setNights(calculateNights(updatedBokning.getStartDate(), updatedBokning.getEndDate()));
-        existingBokning.setTotalPrice(calculateTotalPrice(updatedBokning.getStartDate(), updatedBokning.getEndDate(), rum.getPrice()));
+        existingBokning.setTotalPrice(calculateTotalPrice(updatedBokning.getStartDate(), updatedBokning.getEndDate(), rum.getPrice(), kund.getNightsLastYear()));
 
         bokningRepo.save(existingBokning);
 
@@ -148,11 +150,13 @@ public class BokningServiceImpl implements BokningService {
         return "kunden har tagit borts";
     }
 
+    @Override
     public long calculateNights(LocalDate startDate, LocalDate endDate) {
         return ChronoUnit.DAYS.between(startDate, endDate);
     }
 
-    public double calculateTotalPrice(LocalDate startDate, LocalDate endDate, int pricePerNight) {
+    @Override
+    public double calculateTotalPrice(LocalDate startDate, LocalDate endDate, int pricePerNight, int nightsLastYear) {
         long nights = calculateNights(startDate, endDate);
         double totalPrice = nights * pricePerNight;
 
@@ -165,6 +169,10 @@ public class BokningServiceImpl implements BokningService {
 
         if (nights >= 2) {
             totalPrice *= 0.995;
+        }
+
+        if (nightsLastYear >= 10){
+            totalPrice *= 0.98;
         }
         return totalPrice;
     }

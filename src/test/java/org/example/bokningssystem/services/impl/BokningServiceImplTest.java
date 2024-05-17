@@ -19,11 +19,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -94,7 +93,7 @@ public class BokningServiceImplTest {
   DetailedBokningDto bokningDto = new DetailedBokningDto();
   bokningDto.setStartDate(LocalDate.now().plusDays(1));
   bokningDto.setEndDate(LocalDate.now().plusDays(5));
-  bokningDto.setKund(new KundDto(1L, "Testkund", "testkund@example.com"));
+  bokningDto.setKund(new KundDto(1L, "Testkund", "testkund@example.com", 11));
   bokningDto.setRoom(new RumDto(1L, "Testrum"));
 
   when(kundRepo.findById(anyLong())).thenReturn(Optional.of(kund));
@@ -137,7 +136,7 @@ public class BokningServiceImplTest {
   updatedBokning.setId(1L);
   updatedBokning.setStartDate(LocalDate.parse("2024-09-01"));
   updatedBokning.setEndDate(LocalDate.parse("2024-09-14"));
-  updatedBokning.setKund(new KundDto(1L, "Updated Kund", "updatedkund@example.com"));
+  updatedBokning.setKund(new KundDto(1L, "Updated Kund", "updatedkund@example.com", 11));
   updatedBokning.setRoom(new RumDto(1L, "Updated Room"));
 
   Bokning existingBokning = new Bokning();
@@ -189,7 +188,7 @@ public class BokningServiceImplTest {
   LocalDate endDate = LocalDate.parse("2024-05-22");
   int pricePerNight = 100;
 
-  double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight);
+  double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight, 0);
 
   assertEquals(100, totalPrice);
  }
@@ -200,7 +199,7 @@ public class BokningServiceImplTest {
   LocalDate endDate = LocalDate.parse("2024-05-20");
   int pricePerNight = 100;
 
-  double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight);
+  double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight, 0);
 
   assertEquals(98, totalPrice);
  }
@@ -211,10 +210,32 @@ public class BokningServiceImplTest {
   LocalDate endDate = LocalDate.parse("2024-05-23");
   int pricePerNight = 100;
 
-  double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight);
+  double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight, 0);
 
   assertEquals(298.5, totalPrice);
  }
+
+ @Test
+ public void testCalculateTotalPrice_NightsLastYearMoreThanTen() {
+     LocalDate startDate = LocalDate.parse("2024-05-22");
+     LocalDate endDate = LocalDate.parse("2024-05-23");
+     int pricePerNight = 100;
+
+     double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight, 11);
+
+     assertEquals(98, totalPrice);
+ }
+
+    @Test
+    public void testCalculateTotalPrice_NightsLastYearLessThanTen() {
+        LocalDate startDate = LocalDate.parse("2024-05-22");
+        LocalDate endDate = LocalDate.parse("2024-05-23");
+        int pricePerNight = 100;
+
+        double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight, 9);
+
+        assertEquals(100, totalPrice);
+    }
 
  @Test
  public void testCalculateTotalPrice_SundayToMondayDiscountAndLongStayDiscount() {
@@ -222,10 +243,31 @@ public class BokningServiceImplTest {
   LocalDate endDate = LocalDate.parse("2024-05-22");
   int pricePerNight = 100;
 
-  double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight);
+  double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight, 0);
 
   assertEquals(296.51, totalPrice);
  }
+    @Test
+    public void testCalculateTotalPrice_SundayToMondayDiscountAndNightsLastYearMoreThanTen() {
+        LocalDate startDate = LocalDate.parse("2024-05-19");
+        LocalDate endDate = LocalDate.parse("2024-05-22");
+        int pricePerNight = 100;
+
+        double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight, 10);
+
+        assertEquals(290.5798, totalPrice);
+    }
+
+    @Test
+    public void testCalculateTotalPrice_MultiYearBooking() {
+        LocalDate startDate = LocalDate.parse("2024-12-31");
+        LocalDate endDate = LocalDate.parse("2025-01-01");
+        int pricePerNight = 100;
+
+        double totalPrice = bokningService.calculateTotalPrice(startDate, endDate, pricePerNight, 0);
+
+        assertEquals(100, totalPrice);
+    }
 }
 
 
