@@ -3,10 +3,12 @@ package org.example.bokningssystem.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.bokningssystem.dtos.DetailedEventDto;
 import org.example.bokningssystem.dtos.DetailedKundDto;
 import org.example.bokningssystem.dtos.DetailedRumDto;
 import org.example.bokningssystem.modell.Rum;
 import org.example.bokningssystem.repo.RumRepo;
+import org.example.bokningssystem.services.EventService;
 import org.example.bokningssystem.services.RumService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import java.util.List;
 public class RumController {
 
     private final RumService rumService;
+    private final EventService eventService;
 
 
     @RequestMapping("rooms")
@@ -58,8 +61,10 @@ public class RumController {
     @GetMapping("/roomDetails")
     public String handleRoomDetails(Long roomId, Model model) {
         DetailedRumDto rum = rumService.getRumById(roomId);
+        List<DetailedEventDto> event = eventService.getAllEventsForRum(rum);
 
         model.addAttribute("rum", rum);
+        model.addAttribute("event", event);
 
         return "roomDetails.html";
     }

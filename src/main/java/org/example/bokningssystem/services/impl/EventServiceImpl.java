@@ -1,6 +1,8 @@
 package org.example.bokningssystem.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.bokningssystem.dtos.DetailedEventDto;
+import org.example.bokningssystem.dtos.DetailedRumDto;
 import org.example.bokningssystem.modell.Event;
 import org.example.bokningssystem.modell.Rum;
 import org.example.bokningssystem.repo.EventRepo;
@@ -59,7 +61,7 @@ public class EventServiceImpl implements EventService {
 
 
     @Override
-    public List<Event> getAllEventsForRum(Rum rum) {
+    public List<DetailedEventDto> getAllEventsForRum(DetailedRumDto rum) {
         return eventRepo.findByRum(rum);
     }
 

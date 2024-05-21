@@ -1,5 +1,7 @@
 package org.example.bokningssystem.services;
 
+import org.example.bokningssystem.dtos.DetailedEventDto;
+import org.example.bokningssystem.dtos.DetailedRumDto;
 import org.example.bokningssystem.modell.Event;
 import org.example.bokningssystem.modell.Rum;
 
@@ -14,5 +16,5 @@ public interface EventService {
     Event updateEvent(Long id, Event event);
     void deleteEvent(Long id);
 
-    List<Event> getAllEventsForRum(Rum rum);
+    List<DetailedEventDto> getAllEventsForRum(DetailedRumDto rum);
 }
