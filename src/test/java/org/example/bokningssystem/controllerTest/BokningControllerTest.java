@@ -9,6 +9,7 @@ import org.example.bokningssystem.repo.RumRepo;
 import org.example.bokningssystem.services.BokningService;
 import org.example.bokningssystem.services.KundService;
 import org.example.bokningssystem.services.RumService;
+import org.example.bokningssystem.services.impl.BlackListServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -39,6 +40,9 @@ class BokningControllerTest {
 
     @MockBean
     private RumService rumService;
+
+    @MockBean
+    private BlackListServiceImpl blackListService;
     @Autowired
     private RumRepo rumRepo;
 
@@ -59,7 +63,7 @@ class BokningControllerTest {
         Model model = mock(Model.class);
 
 
-        String viewName = new BokningController(bokningService, kundService, rumService, rumRepo, kundRepo).handleBooking(model);
+        String viewName = new BokningController(bokningService, kundService, rumService, blackListService).handleBooking(model);
 
 
         assertEquals("handleBooking.html", viewName);

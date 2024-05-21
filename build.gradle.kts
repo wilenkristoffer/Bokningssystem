@@ -32,8 +32,16 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+
+
+
+
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
 }

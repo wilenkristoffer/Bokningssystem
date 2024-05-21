@@ -18,8 +18,18 @@ import java.util.Arrays;
 @Service
 public class BlackListServiceImpl {
 
-    private final HttpClient httpClient = HttpClient.newHttpClient();
+
+    private  HttpClient httpClient = HttpClient.newHttpClient();
     ObjectMapper objectMapper = new ObjectMapper().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+
+    public BlackListServiceImpl(HttpClient httpClient, ObjectMapper objectMapper) {
+        this.httpClient = httpClient;
+        this.objectMapper = objectMapper;
+    }
+    public BlackListServiceImpl(){
+
+    }
+
 
     public boolean isCustomerBlacklisted(String email) {
         try {

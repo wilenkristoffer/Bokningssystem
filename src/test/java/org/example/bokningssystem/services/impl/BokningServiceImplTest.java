@@ -94,7 +94,7 @@ public class BokningServiceImplTest {
   DetailedBokningDto bokningDto = new DetailedBokningDto();
   bokningDto.setStartDate(LocalDate.now().plusDays(1));
   bokningDto.setEndDate(LocalDate.now().plusDays(5));
-  bokningDto.setKund(new KundDto(1L, "Testkund"));
+  bokningDto.setKund(new KundDto(1L, "Testkund","test@xample.com"));
   bokningDto.setRoom(new RumDto(1L, "Testrum"));
 
   when(kundRepo.findById(anyLong())).thenReturn(Optional.of(kund));
