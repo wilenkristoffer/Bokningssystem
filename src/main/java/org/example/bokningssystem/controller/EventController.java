@@ -1,57 +1,53 @@
 package org.example.bokningssystem.controller;
 
-import org.example.bokningssystem.modell.Event;
-import org.example.bokningssystem.services.EventService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.example.bokningssystem.dtos.*;
+import org.example.bokningssystem.repo.EventRepo;
+import org.example.bokningssystem.modell.Rum;
+import org.example.bokningssystem.repo.RumRepo;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
-@RestController
+@Controller
 public class EventController {
 
-    private final EventService eventService;
+    private final EventRepo eventRepo;
+    private final RumRepo rumRepo;
 
-    @Autowired
-    public EventController(EventService eventService) {
-        this.eventService = eventService;
+    public EventController(EventRepo eventRepo, RumRepo rumRepo) {
+        this.eventRepo = eventRepo;
+        this.rumRepo = rumRepo;
     }
 
-    @GetMapping("/events")
-    public ResponseEntity<List<Event>> getAllEvents() {
-        List<Event> events = eventService.getAllEvents();
-        return ResponseEntity.ok(events);
-    }
+    @GetMapping("/roomDetails")
+    public String handleRoomDetails(@RequestParam Long roomId, Model model) {
+        Rum rum = rumRepo.findById(roomId).orElse(null);
 
-    @GetMapping("/event/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
-        Optional<Event> event = eventService.getEventById(id);
-        return event.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
+        List<RoomEvent> events = new ArrayList<>();
+        events.addAll(eventRepo.findClosedEventsByRoomNo(String.valueOf(rum.getId())));
+        events.addAll(eventRepo.findOpenedEventsByRoomNo(String.valueOf(rum.getId())));
+        events.addAll(eventRepo.findCleaningStartedEventsByRoomNo(String.valueOf(rum.getId())));
+        events.addAll(eventRepo.findCleaningFinishedEventsByRoomNo(String.valueOf(rum.getId())));
 
-    @PostMapping("/createEvent/{rumId}")
-    public ResponseEntity<Event> createEvent(@PathVariable Long rumId, @RequestBody Event event) {
-        Event createdEvent = eventService.createEvent(rumId, event);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
-    }
+        events.sort(Comparator.comparing(RoomEvent::getTimeStamp));
 
-    @PutMapping("/updateEvent{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
-        Event updatedEvent = eventService.updateEvent(id, event);
-        if (updatedEvent != null) {
-            return ResponseEntity.ok(updatedEvent);
-        } else {
-            return ResponseEntity.notFound().build();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        List<String> formattedTimestamps = new ArrayList<>();
+        for (RoomEvent event : events) {
+            String formattedTimestamp = event.getTimeStamp().format(formatter);
+            formattedTimestamps.add(formattedTimestamp);
         }
-    }
 
-    @DeleteMapping("/deleteEvent{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
-        eventService.deleteEvent(id);
-        return ResponseEntity.noContent().build();
+
+        model.addAttribute("formattedTimestamps", formattedTimestamps);
+        model.addAttribute("rum", rum);
+        model.addAttribute("events", events);
+        return "roomDetails";
     }
 }
-
