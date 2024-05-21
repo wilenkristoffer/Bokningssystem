@@ -22,6 +22,9 @@ public class Bokning {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private long nights;
+    private double totalPrice;
+
     @ManyToOne
     @JoinColumn
     private Rum room;

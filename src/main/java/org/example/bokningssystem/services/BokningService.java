@@ -7,6 +7,7 @@ import org.example.bokningssystem.modell.Bokning;
 import org.example.bokningssystem.modell.Kund;
 import org.example.bokningssystem.modell.Rum;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface BokningService {
@@ -22,4 +23,6 @@ public interface BokningService {
     public String addBokningCheck(DetailedBokningDto bokning);
     public String modifyBookning(DetailedBokningDto updatedBokning);
     public String deleteBooking(Long bokningId);
+    public long calculateNights(LocalDate startDate, LocalDate endDate);
+    public double calculateTotalPrice(LocalDate startDate, LocalDate endDate, int pricePerNight, int nightsLastYear);
 }

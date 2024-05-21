@@ -42,8 +42,10 @@ public class Kund {
     @Size(min = 10, max = 12)
     private String personummer;
 
+    private int nightsLastYear;
+
     //(mappedBy = "kund")
-    @OneToMany(mappedBy = "kund")
+    @OneToMany(mappedBy = "kund", fetch = FetchType.EAGER)
     private List<Bokning> kundBokning;
 
 

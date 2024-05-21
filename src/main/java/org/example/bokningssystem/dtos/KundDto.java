@@ -14,5 +14,6 @@ public class KundDto {
     private Long id;
     private String namn;
     private String email;
+    private int nightsLastYear;
     //Kan tillägga mer kanske?
 }

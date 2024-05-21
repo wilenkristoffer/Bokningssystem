@@ -41,6 +41,8 @@
                 <th>Rumsnamn</th>
                 <th>Startdatum</th>
                 <th>Slutdatum</th>
+                <th>Antal Nätter</th>
+                <th>Total Pris</th>
                 <th>Ändra</th>
                 <th>Ta bort</th>
             </tr>
@@ -51,6 +53,8 @@
                 <td th:text="${bokning.room.name}"></td>
                 <td th:text="${bokning.startDate}"></td>
                 <td th:text="${bokning.endDate}"></td>
+                <td th:text="${bokning.nights}"></td>
+                <td th:text="${bokning.totalPrice}"></td>
                 <td><button class="btn btn-dark edit-btn" data-id="${bokning.id}">Ändra</button></td>
                 <td><a th:href="@{/booking/deleteById/{id}(id=${bokning.id})}" class="btn btn-danger">Ta bort</a></td>
             </tr>
