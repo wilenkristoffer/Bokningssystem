@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -34,15 +35,17 @@ public class EventController {
         events.addAll(eventRepo.findCleaningStartedEventsByRoomNo(String.valueOf(rum.getId())));
         events.addAll(eventRepo.findCleaningFinishedEventsByRoomNo(String.valueOf(rum.getId())));
 
+        events.sort(Comparator.comparing(RoomEvent::getTimeStamp));
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         List<String> formattedTimestamps = new ArrayList<>();
         for (RoomEvent event : events) {
             String formattedTimestamp = event.getTimeStamp().format(formatter);
             formattedTimestamps.add(formattedTimestamp);
         }
+
+
         model.addAttribute("formattedTimestamps", formattedTimestamps);
-
-
         model.addAttribute("rum", rum);
         model.addAttribute("events", events);
         return "roomDetails";
