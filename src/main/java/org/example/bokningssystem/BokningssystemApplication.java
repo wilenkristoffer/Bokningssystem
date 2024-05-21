@@ -20,6 +20,10 @@ public class BokningssystemApplication {
             SpringApplication application = new SpringApplication(ContractCustomerApplication.class);
             application.setWebApplicationType(WebApplicationType.NONE);
             application.run(args);
+        }else if (Objects.equals(args[0], "EventApp")) {
+            SpringApplication application  = new SpringApplication(EventApplication.class);
+            application.setWebApplicationType(WebApplicationType.NONE);
+            application.run(args);
         }
     }
 

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.bokningssystem.modell.Bokning;
 import org.example.bokningssystem.modell.Rumstyp;
+import org.springframework.format.annotation.NumberFormat;
 
 import java.util.List;
 
@@ -31,6 +32,8 @@ public class DetailedRumDto {
     @Min(value = 0, message = "Måste vara minst 0")
     @Max(value = 2, message = "Måste vara högst 2")
     private int antalSangar;
+
+    private int price;
 
     private List<BokningDto> bokning;
 }

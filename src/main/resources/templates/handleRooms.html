@@ -28,9 +28,8 @@
                         <th scope="col">Namn</th>
                         <th scope="col">Rumstyp</th>
                         <th scope="col">Antal extra-sängar</th>
+                        <th scope="col">Pris per natt</th>
                         <th scope="col">Rumshantering</th>
-
-
                     </tr>
                     </thead>
                     <tbody>
@@ -38,8 +37,8 @@
                         <td><a class="rum-link" th:href="@{/roomDetails(roomId=${rum.id})}" th:text="${rum.name}"></a></td>
                         <td th:text="${rum.rumstyp}"></td>
                         <td th:text="${rum.antalSangar}"></td>
+                        <td th:text="${rum.price}"></td>
                         <td><button class="btn btn-dark edit-btn" data-id="${rum.id}">Hantera</button></td>
-
                     </tr>
                     </tbody>
                 </table>
@@ -71,12 +70,16 @@
                             <option value="2">2</option>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="modifyRoomPrice" class="form-label">Pris per natt:</label>
+                        <input type="number" id="modifyRoomPrice" name="price" class="form-control">
+                    </div>
                     <button type="submit" class="btn btn-dark">Spara</button>
                 </form>
             </div>
 
             <div class="add-room">
-                <h2 class="mb-3">Registrera ny rum</h2>
+                <h2 class="mb-3">Registrera nytt rum</h2>
                 <form action="roomCreated" method="post" class="mb-4">
                     <div class="mb-3">
                         <label for="name" class="form-label">Namn:</label>
@@ -89,13 +92,18 @@
                             <option value="DUBBELRUM">Dubbelrum</option>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Pris per natt:</label>
+                        <input type="number" id="price" name="price" class="form-control">
+                    </div>
                     <button type="submit" class="btn btn-dark">Lägg till</button>
                 </form>
             </div>
         </div>
-        </div>
     </div>
-            <footer class="py-5 bg-dark">
+</div>
+
+<footer class="py-5 bg-dark">
     <div class="container px-4 px-lg-5"><p class="m-0 text-center text-white">Copyright &copy; 2024</p></div>
 </footer>
 
@@ -103,7 +111,6 @@
 
 <script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function() {
-
         document.getElementById('modifyRoomType').addEventListener('change', function() {
             const roomType = this.value;
             const extraBedsSelect = document.getElementById('modifyExtraBeds');
@@ -123,11 +130,13 @@
                 const roomName = row.querySelector('td:first-child').textContent.trim();
                 const roomType = row.querySelector('td:nth-child(2)').textContent.trim();
                 const extraBeds = row.querySelector('td:nth-child(3)').textContent.trim();
+                const roomPrice = row.querySelector('td:nth-child(4)').textContent.trim();
 
                 document.getElementById('modifyRoomId').value = roomId;
                 document.getElementById('modifyRoomName').value = roomName;
                 document.getElementById('modifyRoomType').value = roomType;
                 document.getElementById('modifyExtraBeds').value = extraBeds;
+                document.getElementById('modifyRoomPrice').value = roomPrice;
 
                 if (roomType === 'DUBBELRUM') {
                     document.getElementById('modifyExtraBeds').removeAttribute('disabled');

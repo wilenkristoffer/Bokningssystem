@@ -31,7 +31,7 @@ public class RumServiceImpl implements RumService {
     @Override
     public DetailedRumDto rumToDetailedRumDto(Rum r) {
         return DetailedRumDto.builder().id(r.getId())
-                .name(r.getName()).rumstyp(r.getRumstyp()).antalSangar(r.getAntalSangar())
+                .name(r.getName()).rumstyp(r.getRumstyp()).antalSangar(r.getAntalSangar()).price(r.getPrice())
                 .bokning(r.getRumBokning().stream()
                         .map(bo -> bokningService.bokningToBokningDto(bo)).toList())
                 .build();
@@ -40,7 +40,7 @@ public class RumServiceImpl implements RumService {
     @Override
     public Rum detailedRumToDetailedRumDto(DetailedRumDto r) {
         return Rum.builder().id(r.getId())
-                .name(r.getName()).rumstyp(r.getRumstyp()).antalSangar(r.getAntalSangar())
+                .name(r.getName()).rumstyp(r.getRumstyp()).antalSangar(r.getAntalSangar()).price(r.getPrice())
                 .build();
     }
 
@@ -73,6 +73,7 @@ public class RumServiceImpl implements RumService {
         existingRoom.setName(updatedRoom.getName());
         existingRoom.setRumstyp(updatedRoom.getRumstyp());
         existingRoom.setAntalSangar(updatedRoom.getAntalSangar());
+        existingRoom.setPrice(updatedRoom.getPrice());
 
 
         rumRepo.save(existingRoom);

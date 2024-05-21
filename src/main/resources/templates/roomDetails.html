@@ -16,27 +16,35 @@
         <a class="navbar-brand" href="/">Hem</a>
     </div>
 </nav>
-<div class="col-lg-8 mx-auto">
-    <div class="rooms">
-        <h2 th:text="'Händelser för rum' + ' - ' + ${rum.id} + ' (' + ${rum.name} + ')'" class="mb-3"></h2>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Händelser</th>
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-               <!-- Händelser här -->
-            </tr>
-            </tbody>
-        </table>
+<div th:if="${addSuccess}" class="alert alert-success text-center" role="alert">
+    <span th:text="${addSuccess}"></span>
+</div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="rooms" th:data-room-id="${rum.id}">
+                <h2 th:text="'Händelser för rum ' + ${rum.id} + ' - (' + ${rum.name} + ')'" class="mb-3"></h2>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Händelse</th>
+                        <th scope="col">Tidsstämpel</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="event, i : ${events}">
+                        <td th:text="${event.description}"></td>
+                        <td th:text="${formattedTimestamps[i.index]}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
-    </div>
-</div>
-<script>
-</script>
+
+
+
 </body>
 </html>

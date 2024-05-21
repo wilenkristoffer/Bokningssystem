@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.NumberFormat;
 
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class Rum {
     @Min(value = 0, message = "Måste vara minst 0")
     @Max(value = 2, message = "Måste vara högst 2")
     private int antalSangar;
+
+    private int price;
 
     @OneToMany(mappedBy = "room")
     private List<Bokning> rumBokning;
