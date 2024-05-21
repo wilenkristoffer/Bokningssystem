@@ -64,6 +64,7 @@ public class BokningServiceImplTest {
 
  @Test
  public void testBokningToBokningDto() {
+  bokning.setId(1L);
   when(bokningRepo.findById(1L)).thenReturn(Optional.of(bokning));
 
   BokningDto bokningDto = bokningService.bokningToBokningDto(bokning);
@@ -90,6 +91,7 @@ public class BokningServiceImplTest {
 
  @Test
  public void testAddBokning() {
+
   DetailedBokningDto bokningDto = new DetailedBokningDto();
   bokningDto.setStartDate(LocalDate.now().plusDays(1));
   bokningDto.setEndDate(LocalDate.now().plusDays(5));
