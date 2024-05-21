@@ -6,7 +6,7 @@ import org.example.bokningssystem.dtos.KundDto;
 import org.example.bokningssystem.dtos.RumDto;
 import org.example.bokningssystem.repo.KundRepo;
 import org.example.bokningssystem.repo.RumRepo;
-import org.example.bokningssystem.services.BokningService;
+//import org.example.bokningssystem.services.BokningService;
 import org.example.bokningssystem.services.KundService;
 import org.example.bokningssystem.services.RumService;
 import org.junit.jupiter.api.Test;

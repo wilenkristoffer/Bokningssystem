@@ -26,7 +26,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class BokningServiceImpl implements BokningService {
+public class BokningServiceImpl implements BokningService{
 
     private final BokningRepo bokningRepo;
     private final KundRepo kundRepo;
