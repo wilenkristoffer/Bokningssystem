@@ -17,7 +17,8 @@ public class RoomCleaningFinishedEvent extends RoomEvent {
     public RoomCleaningFinishedEvent() {
 
     }
+    @Override
     public String getDescription() {
-        return "Städning avslutad av " + cleaningByUser;
+        return "Städning avlutad av " + cleaningByUser;
     }
 }

@@ -4,8 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "room_closed_events")
 public class RoomClosedEvent extends RoomEvent {
@@ -15,5 +13,9 @@ public class RoomClosedEvent extends RoomEvent {
 
     public RoomClosedEvent() {
 
+    }
+    @Override
+    public String getDescription() {
+        return description;
     }
 }

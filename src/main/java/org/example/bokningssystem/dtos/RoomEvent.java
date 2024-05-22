@@ -20,7 +20,8 @@ import java.time.LocalDateTime;
         @JsonSubTypes.Type(value = RoomCleaningFinishedEvent.class, name = "RoomCleaningFinished")
 })
 @Data
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class RoomEvent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +34,7 @@ public abstract class RoomEvent {
     private LocalDateTime timeStamp;
 
     public RoomEvent() {}
+
+    public abstract String getDescription();
 
 }

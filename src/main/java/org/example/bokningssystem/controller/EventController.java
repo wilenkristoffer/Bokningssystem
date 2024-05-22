@@ -29,11 +29,7 @@ public class EventController {
     public String handleRoomDetails(@RequestParam Long roomId, Model model) {
         Rum rum = rumRepo.findById(roomId).orElse(null);
 
-        List<RoomEvent> events = new ArrayList<>();
-        events.addAll(eventRepo.findClosedEventsByRoomNo(String.valueOf(rum.getId())));
-        events.addAll(eventRepo.findOpenedEventsByRoomNo(String.valueOf(rum.getId())));
-        events.addAll(eventRepo.findCleaningStartedEventsByRoomNo(String.valueOf(rum.getId())));
-        events.addAll(eventRepo.findCleaningFinishedEventsByRoomNo(String.valueOf(rum.getId())));
+        List<RoomEvent> events = eventRepo.findByRoomNo(String.valueOf(rum.getId()));
 
         events.sort(Comparator.comparing(RoomEvent::getTimeStamp));
 

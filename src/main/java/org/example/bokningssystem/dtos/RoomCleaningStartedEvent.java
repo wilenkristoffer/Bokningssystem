@@ -6,7 +6,6 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "room_cleaning_started_events")
@@ -19,6 +18,7 @@ public class RoomCleaningStartedEvent extends RoomEvent {
 
     public RoomCleaningStartedEvent() {}
 
+    @Override
     public String getDescription() {
         return "Städning påbörjat av " + cleaningByUser;
     }
