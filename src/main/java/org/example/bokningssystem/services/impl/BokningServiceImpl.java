@@ -13,7 +13,9 @@ import org.example.bokningssystem.repo.BokningRepo;
 import org.example.bokningssystem.repo.KundRepo;
 import org.example.bokningssystem.repo.RumRepo;
 import org.example.bokningssystem.services.BokningService;
+import org.example.bokningssystem.services.EmailService;
 import org.example.bokningssystem.services.KundService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,9 @@ public class BokningServiceImpl implements BokningService{
     private final BokningRepo bokningRepo;
     private final KundRepo kundRepo;
     private final RumRepo rumRepo;
+
+    @Autowired
+    private EmailService emailService;
 
 
     @Override
@@ -76,7 +81,6 @@ public class BokningServiceImpl implements BokningService{
 
     @Override
     public Bokning detailedBokningDtoToBokning(DetailedBokningDto b, Kund kund, Rum rum){
-        double totalPrice = calculateTotalPrice(b.getStartDate(), b.getEndDate(), rum.getPrice(), kund.getNightsLastYear());
         return Bokning.builder()
                 .id(b.getId())
                 .startDate(b.getStartDate())
@@ -98,6 +102,8 @@ public class BokningServiceImpl implements BokningService{
         newBokning.setTotalPrice(calculateTotalPrice(bokning.getStartDate(), bokning.getEndDate(), rum.getPrice(), kund.getNightsLastYear()));
 
         bokningRepo.save(newBokning);
+
+        emailService.sendBookingConfirmationEmail(newBokning);
         return "Bokning tillagd";
     }
 
