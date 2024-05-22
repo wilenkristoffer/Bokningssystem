@@ -38,6 +38,7 @@ public class EmailService {
         placeholders.put("totalPrice", String.valueOf(booking.getTotalPrice()));
 
         String subject = TemplateUtil.replacePlaceholders(emailTemplate.getSubject(), placeholders);
+        String body = TemplateUtil.replacePlaceholders(emailTemplate.getBody(), placeholders);
 
         String htmlBody = "<!DOCTYPE html>"
                 + "<html><head><style>"
@@ -55,16 +56,7 @@ public class EmailService {
                 + "<div class='container'>"
                 + "<div class='header'><h1>Bokningsbekräftelse</h1></div>"
                 + "<div class='content'>"
-                + "<p>Hej !!!namn!!!,</p>"
-                + "<p>Tack för din bokning på vårt hotell. Här är detaljerna för din bokning:</p>"
-                + "<ul>"
-                + "<li><strong>Rum:</strong> !!!room!!!</li>"
-                + "<li><strong>Antal nätter:</strong> !!!nights!!!</li>"
-                + "<li><strong>Startdatum:</strong> !!!startdate!!!</li>"
-                + "<li><strong>Slutdatum:</strong> !!!enddate!!!</li>"
-                + "<li><strong>Totalpris:</strong> !!!totalPrice!!! SEK</li>"
-                + "</ul>"
-                + "<p>Vi ser fram emot att välkomna dig!</p>"
+                + body
                 + "</div>"
                 + "<div class='footer'><p>Hotell AB | Adressvägen 123, 123 45 Staden | Tel: 012-345 678</p></div>"
                 + "</div>"
