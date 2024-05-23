@@ -19,6 +19,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
@@ -35,13 +38,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    public void deleteUserById(UUID id) {
+        userRepository.deleteById(id);
+    }
+
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
-    public void deleteUserById(UUID id) {
-        userRepository.deleteById(id);
+    public void saveUserWithRoles(User user, List<UUID> roleIds) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        List<Role> roles = roleRepository.findAllById(roleIds);
+        user.setRoles(roles);
+        userRepository.save(user);
     }
 
 }

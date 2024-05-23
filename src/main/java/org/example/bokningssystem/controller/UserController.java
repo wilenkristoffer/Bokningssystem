@@ -16,6 +16,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserDetailsServiceImpl userDetailsService;
+    private final RoleRepository roleRepository;
 
 
     @RequestMapping("/user")
@@ -31,7 +32,17 @@ public class UserController {
 
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable UUID id) {
+
         userDetailsService.deleteUserById(id);
+        return "redirect:/user";
+    }
+
+    @PostMapping("/user/create")
+    public String createUser(@ModelAttribute User user, @RequestParam List<UUID> roleIds, Model model) {
+        List<Role> roles = roleRepository.findAll();
+        model.addAttribute("roles", roles);
+
+        userDetailsService.saveUserWithRoles(user, roleIds);
         return "redirect:/user";
     }
 }
