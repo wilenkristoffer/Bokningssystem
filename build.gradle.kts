@@ -29,6 +29,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation:3.0.5")
     implementation ("org.springframework.boot:spring-boot-starter-mail")
     implementation("com.rabbitmq:amqp-client:5.21.0")
+    implementation("me.paulschwarz:spring-dotenv:2.3.0")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.mysql:mysql-connector-j")
