@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "User")
@@ -28,5 +29,11 @@ public class User {
 
     @OneToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles;
+
+    public String getRoleNames() {
+        return roles.stream()
+                .map(Role::getName)
+                .collect(Collectors.joining(", "));
+    }
 }
 
