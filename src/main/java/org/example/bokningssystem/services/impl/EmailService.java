@@ -1,4 +1,4 @@
-package org.example.bokningssystem.services;
+package org.example.bokningssystem.services.impl;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

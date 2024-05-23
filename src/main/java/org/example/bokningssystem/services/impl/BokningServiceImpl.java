@@ -13,11 +13,8 @@ import org.example.bokningssystem.repo.BokningRepo;
 import org.example.bokningssystem.repo.KundRepo;
 import org.example.bokningssystem.repo.RumRepo;
 import org.example.bokningssystem.services.BokningService;
-import org.example.bokningssystem.services.EmailService;
-import org.example.bokningssystem.services.KundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
