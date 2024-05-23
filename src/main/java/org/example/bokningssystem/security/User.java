@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,13 +28,19 @@ public class User {
     private String password;
     private boolean enabled;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private List<Role> roles;
 
     public String getRoleNames() {
         return roles.stream()
                 .map(Role::getName)
                 .collect(Collectors.joining(", "));
+
     }
 }
 

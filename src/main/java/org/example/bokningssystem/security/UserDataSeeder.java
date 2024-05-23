@@ -1,46 +1,62 @@
 package org.example.bokningssystem.security;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserDataSeeder {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
-    public void Seed(){
+    @Transactional
+    public void seed() {
         if (roleRepository.findByName("Admin") == null) {
             addRole("Admin");
         }
         if (roleRepository.findByName("Customer") == null) {
             addRole("Customer");
         }
-        if(userRepository.getUserByUsername("stefan.holmberg@systementor.se") == null){
-            addUser("stefan.holmberg@systementor.se","Admin");
+        if (userRepository.getUserByUsername("stefan.holmberg@systementor.se") == null) {
+            addUser("stefan.holmberg@systementor.se", "Admin");
         }
-        if(userRepository.getUserByUsername("oliver.holmberg@systementor.se") == null){
-            addUser("oliver.holmberg@systementor.se","Customer");
+        if (userRepository.getUserByUsername("oliver.holmberg@systementor.se") == null) {
+            addUser("oliver.holmberg@systementor.se", "Customer");
         }
     }
 
-    private void addUser(String mail, String group) {
-        ArrayList<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName(group));
+    @Transactional
+    protected void addUser(String mail, String group) {
+        Role role = roleRepository.findByName(group);
+        if (role == null) {
+            throw new IllegalArgumentException("Role " + group + " not found");
+        }
+
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hash = encoder.encode("Hejsan123#");
-        User user = User.builder().enabled(true).password(hash).username(mail).roles(roles).build();
+
+        User user = User.builder()
+                .enabled(true)
+                .password(hash)
+                .username(mail)
+                .roles(roles)
+                .build();
+
         userRepository.save(user);
     }
 
-    private void addRole(String name) {
-        Role role = new Role();
-        roleRepository.save(Role.builder().name(name).build());
+    @Transactional
+    protected void addRole(String name) {
+        Role role = Role.builder().name(name).build();
+        roleRepository.save(role);
     }
-
 }

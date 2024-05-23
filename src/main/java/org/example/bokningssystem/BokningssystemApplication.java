@@ -37,7 +37,7 @@ public class BokningssystemApplication {
     @Bean
     CommandLineRunner commandLineRunner() {
         return args -> {
-            userDataSeeder.Seed();
+            userDataSeeder.seed();
         };
     }
 

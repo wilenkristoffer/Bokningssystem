@@ -27,6 +27,9 @@ public class UserController {
         model.addAttribute("pageTitle", "Alla befintliga användare");
         model.addAttribute("tableHeadings", Arrays.asList("Namn", "Role"));
         model.addAttribute("emptyListMessage", "Inga användare hittades");
+
+        List<Role> roles = roleRepository.findAll();
+        model.addAttribute("roles", roles);
         return "userAccounts.html";
     }
 
@@ -38,10 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/user/create")
-    public String createUser(@ModelAttribute User user, @RequestParam List<UUID> roleIds, Model model) {
-        List<Role> roles = roleRepository.findAll();
-        model.addAttribute("roles", roles);
-
+    public String createUser(@ModelAttribute User user, @RequestParam List<UUID> roleIds) {
         userDetailsService.saveUserWithRoles(user, roleIds);
         return "redirect:/user";
     }
