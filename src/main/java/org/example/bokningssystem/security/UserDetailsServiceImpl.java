@@ -49,11 +49,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRepository.delete(user);
     }
 
-    public void saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-    }
-
     public void saveUserWithRoles(User user, List<UUID> roleIds) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 

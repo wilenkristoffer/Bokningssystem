@@ -32,7 +32,7 @@ public class UserDataSeeder {
     }
 
     @Transactional
-    protected void addUser(String mail, String group) {
+    public void addUser(String mail, String group) {
         Role role = roleRepository.findByName(group);
         if (role == null) {
             throw new IllegalArgumentException("Role " + group + " not found");
@@ -55,7 +55,7 @@ public class UserDataSeeder {
     }
 
     @Transactional
-    protected void addRole(String name) {
+    public void addRole(String name) {
         Role role = Role.builder().name(name).build();
         roleRepository.save(role);
     }
