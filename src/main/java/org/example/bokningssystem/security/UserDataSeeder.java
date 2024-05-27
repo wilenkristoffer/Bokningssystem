@@ -20,14 +20,14 @@ public class UserDataSeeder {
         if (roleRepository.findByName("Admin") == null) {
             addRole("Admin");
         }
-        if (roleRepository.findByName("Customer") == null) {
-            addRole("Customer");
+        if (roleRepository.findByName("Receptionist") == null) {
+            addRole("Receptionist");
         }
         if (userRepository.getUserByUsername("stefan.holmberg@systementor.se") == null) {
             addUser("stefan.holmberg@systementor.se", "Admin");
         }
         if (userRepository.getUserByUsername("oliver.holmberg@systementor.se") == null) {
-            addUser("oliver.holmberg@systementor.se", "Customer");
+            addUser("oliver.holmberg@systementor.se", "Receptionist");
         }
     }
 
