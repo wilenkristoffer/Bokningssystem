@@ -12,6 +12,7 @@ import org.example.bokningssystem.modell.Kund;
 import org.example.bokningssystem.repo.KundRepo;
 import org.example.bokningssystem.services.BokningService;
 import org.example.bokningssystem.services.KundService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -113,6 +114,7 @@ public class KundServiceImpl implements KundService {
         return "kunden har tagit borts";
     }
 
+    @Scheduled(fixedRate = 1000)
     @Override
     public void updateNightsLastYearForAllCustomers() {
         List<Kund> kunder = kundRepo.findAll();
