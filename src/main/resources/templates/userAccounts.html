@@ -59,10 +59,8 @@
                 </thead>
                 <tbody>
                 <tr th:each="role : ${roles}">
-                    <td><span class="hidden room-id" th:text="${role.id}"></span></td>
                     <td th:text="${role.name}"></td>
-                    <td><input type="radio" th:value="${role.id}" name="roleIds" class="choose-radio"></td>
-
+                    <td><input type="checkbox" th:value="${role.id}" name="roleIds" class="choose-checkbox"></td>
                 </tr>
                 </tbody>
             </table>
@@ -70,7 +68,6 @@
         <input type="hidden" name="enabled" value="true">
         <button type="submit" class="btn btn-primary">Skapa</button>
     </form>
-</div>
 
 </body>
 </html>
