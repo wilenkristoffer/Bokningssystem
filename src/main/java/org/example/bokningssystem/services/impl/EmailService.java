@@ -77,4 +77,23 @@ public class EmailService {
 
         mailSender.send(mimeMessage);
     }
+
+    public void sendPasswordResetEmail(String email, String resetLink) {
+        String subject = "Återställ ditt lösenord";
+        String body = "<p>Klicka på länken nedan för att återställa ditt lösenord:</p>"
+                + "<p><a href=\"" + resetLink + "\">" + resetLink + "</a></p>"
+                + "<p>Länken är giltig i 24 timmar.</p>";
+
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
+        try {
+            helper.setTo(email);
+            helper.setSubject(subject);
+            helper.setText(body, true);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+
+        mailSender.send(mimeMessage);
+    }
     }

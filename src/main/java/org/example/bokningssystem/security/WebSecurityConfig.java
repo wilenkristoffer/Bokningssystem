@@ -39,11 +39,12 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/img/**", "/css/**" ,"/login/**", "/logout" ).permitAll()
+                        .requestMatchers("/", "/img/**", "/css/**", "/login", "/logout", "/resetpass", "/reset", "/process-reset").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
+                        .failureUrl("/login?error=true")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
