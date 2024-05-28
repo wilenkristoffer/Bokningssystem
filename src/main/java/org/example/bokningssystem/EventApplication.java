@@ -7,17 +7,21 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
+import lombok.RequiredArgsConstructor;
+import org.example.bokningssystem.configuration.IntegrationProperties;
 import org.example.bokningssystem.dtos.RoomCleaningStartedEvent;
 import org.example.bokningssystem.dtos.RoomClosedEvent;
 import org.example.bokningssystem.dtos.RoomEvent;
 import org.example.bokningssystem.dtos.RoomOpenedEvent;
 import org.example.bokningssystem.repo.EventRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Component;
 
-
+/*
 @ComponentScan
 @EnableJpaRepositories(basePackages = "org.example.bokningssystem.repo")
 public class EventApplication implements CommandLineRunner {
@@ -60,6 +64,48 @@ public class EventApplication implements CommandLineRunner {
 
         eventRepo.save(event);
 
+    }
+
+}*/
+@ComponentScan
+@RequiredArgsConstructor
+public class EventApplication implements CommandLineRunner {
+    @Autowired
+    private final IntegrationProperties integrationProperties;
+
+    private final EventRepo eventRepo;
+
+    @Override
+    public void run(String... args) throws Exception {
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setHost(integrationProperties.getEventProperties().getEventHost());
+        factory.setUsername(integrationProperties.getEventProperties().getEventUsername());
+        factory.setPassword(integrationProperties.getEventProperties().getEventPassword());
+        Connection connection = factory.newConnection();
+        Channel channel = connection.createChannel();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
+
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            String message = new String(delivery.getBody(), "UTF-8");
+            try {
+                RoomEvent event = mapper.readValue(message, RoomEvent.class);
+                handleEvent(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            System.out.println(" [x] Received '" + message + "'");
+        };
+
+        channel.basicConsume(integrationProperties.getEventProperties().getEventQueueName(), true, deliverCallback, consumerTag -> {
+        });
+    }
+
+    private void handleEvent(RoomEvent event) {
+        eventRepo.save(event);
     }
 
 }
