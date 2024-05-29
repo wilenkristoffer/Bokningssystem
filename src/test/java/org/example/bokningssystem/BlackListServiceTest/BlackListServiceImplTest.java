@@ -1,6 +1,7 @@
 package org.example.bokningssystem.BlackListServiceTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.bokningssystem.configuration.IntegrationProperties;
 import org.example.bokningssystem.services.impl.BlackListServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,9 @@ public class BlackListServiceImplTest {
     @Mock
     private ObjectMapper objectMapper;
 
+    @Mock
+    private IntegrationProperties integrationProperties;
+
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -36,11 +40,11 @@ public class BlackListServiceImplTest {
                 .thenReturn(mockResponse);
 
 
-        BlackListServiceImpl blackListService = new BlackListServiceImpl(httpClient, objectMapper);
-        boolean isBlacklisted = blackListService.isCustomerBlacklisted(email);
+       BlackListServiceImpl blackListService = new BlackListServiceImpl(integrationProperties,httpClient, objectMapper);
+       boolean isBlacklisted = blackListService.isCustomerBlacklisted(email);
 
 
-        assertFalse(isBlacklisted);
+       assertFalse(isBlacklisted);
     }
 
     @Test
@@ -53,8 +57,8 @@ public class BlackListServiceImplTest {
         when(httpClient.send(Mockito.any(), Mockito.<HttpResponse.BodyHandler<String>>any()))
                 .thenReturn(mockResponse);
 
-        BlackListServiceImpl blackListService = new BlackListServiceImpl(httpClient, objectMapper);
-        blackListService.addEmailToBlackList(email);
+      BlackListServiceImpl blackListService = new BlackListServiceImpl(integrationProperties,httpClient, objectMapper);
+      blackListService.addEmailToBlackList(email);
 
 
     }
@@ -70,8 +74,8 @@ public class BlackListServiceImplTest {
         when(httpClient.send(Mockito.any(), Mockito.<HttpResponse.BodyHandler<String>>any()))
                 .thenReturn(mockResponse);
 
-        BlackListServiceImpl blackListService = new BlackListServiceImpl(httpClient, objectMapper);
-        blackListService.removeEmailFromBlackList(email, newStatus);
+    BlackListServiceImpl blackListService = new BlackListServiceImpl(integrationProperties,httpClient, objectMapper);
+    blackListService.removeEmailFromBlackList(email, newStatus);
 
 
     }

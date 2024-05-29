@@ -6,7 +6,7 @@ import org.example.bokningssystem.dtos.KundDto;
 import org.example.bokningssystem.dtos.RumDto;
 import org.example.bokningssystem.repo.KundRepo;
 import org.example.bokningssystem.repo.RumRepo;
-//import org.example.bokningssystem.services.BokningService;
+import org.example.bokningssystem.services.BokningService;
 import org.example.bokningssystem.services.KundService;
 import org.example.bokningssystem.services.RumService;
 import org.example.bokningssystem.services.impl.BlackListServiceImpl;
@@ -24,7 +24,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-/*
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class BokningControllerTest {
@@ -80,4 +80,4 @@ class BokningControllerTest {
         verify(model).addAttribute("roomPageTitle", "Alla rum");
         verify(model).addAttribute("roomEmptyListMessage", "Inga rum hittades");
     }
-}*/
+}
