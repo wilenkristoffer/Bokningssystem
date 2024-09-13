@@ -41,7 +41,7 @@ public class ContractCustomerApplication implements CommandLineRunner {
     }
 }*/
 
-@Component
+@ComponentScan
 @RequiredArgsConstructor
 public class ContractCustomerApplication implements CommandLineRunner {
 
